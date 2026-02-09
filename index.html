@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gandhi – A Geographic Biography | The Story</title>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&family=Comic+Neue:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #faf9f6;
+            --bg-dark: #1a1a1a;
+            --text-primary: #121212;
+            --text-secondary: #666666;
+            --accent: #c41e3a;
+            --border: #e0e0e0;
+            --comic-yellow: #fff9c4;
+            --comic-border: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        /* ===== HEADER ===== */
+        .site-header {
+            border-bottom: 1px solid var(--border);
+            padding: 15px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 1000;
+        }
+
+        .site-header .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 30px;
+            text-align: center;
+        }
+
+        .hero-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 25px;
+        }
+
+        .hero .subtitle {
+            font-size: 22px;
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .hero .byline {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .hero .byline span {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ===== ARTICLE CONTENT ===== */
+        .article-content {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .article-content p {
+            margin-bottom: 25px;
+        }
+
+        .article-content p.lead {
+            font-size: 22px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .article-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            margin: 60px 0 25px;
+        }
+
+        .drop-cap::first-letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            float: left;
+            line-height: 0.8;
+            margin: 5px 12px 0 0;
+            color: var(--accent);
+        }
+
+        .highlight-text {
+            background: linear-gradient(180deg, transparent 60%, rgba(196, 30, 58, 0.2) 60%);
+            padding: 0 3px;
+        }
+
+        /* ===== DATA CARDS ===== */
+        .data-section {
+            background: var(--bg-dark);
+            color: white;
+            padding: 60px 30px;
+            margin: 60px 0;
+        }
+
+        .data-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .data-cards {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .data-card {
+            text-align: center;
+        }
+
+        .data-card .value {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .data-card .label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        /* ===== MAP SECTION ===== */
+        .map-section {
+            margin: 80px 0;
+            padding: 0 30px;
+        }
+
+        .map-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .map-section .section-intro {
+            text-align: center;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .map-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            border: 3px solid var(--comic-border);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 6px 6px 0 var(--comic-border);
+            height: 550px;
+        }
+
+        #map {
+            flex: 1;
+            height: 100%;
+        }
+
+        .story-panel {
+            width: 300px;
+            height: 100%;
+            overflow-y: auto;
+            background: white;
+            border-left: 3px solid var(--comic-border);
+        }
+
+        .story-step {
+            padding: 25px 20px;
+            border-bottom: 2px dashed var(--comic-border);
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.5;
+        }
+
+        .story-step:hover {
+            background: #f5f5f5;
+        }
+
+        .story-step.active {
+            opacity: 1;
+            background: var(--comic-yellow);
+            border-left: 4px solid var(--accent);
+        }
+
+        .story-step .year {
+            font-family: 'Comic Neue', cursive;
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .story-step .place {
+            font-family: 'Comic Neue', cursive;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 5px 0;
+        }
+
+        .story-step .text {
+            font-family: 'Comic Neue', cursive;
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Extra space at bottom for last item */
+        .story-panel-spacer {
+            height: 300px;
+        }
+
+        /* ===== COMIC STYLE MAP POPUP ===== */
+        .leaflet-popup-content-wrapper {
+            background: var(--comic-yellow);
+            border: 3px solid var(--comic-border);
+            border-radius: 15px;
+            box-shadow: 4px 4px 0 var(--comic-border);
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .leaflet-popup-tip-container {
+            display: none;
+        }
+
+        .leaflet-popup-content {
+            margin: 15px 18px;
+            font-size: 14px;
+        }
+
+        .popup-content .popup-year {
+            font-family: 'Comic Neue', cursive;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            display: inline-block;
+            background: white;
+            padding: 2px 10px;
+            border-radius: 8px;
+            border: 2px solid var(--comic-border);
+        }
+
+        .popup-content .popup-place {
+            font-family: 'Comic Neue', cursive;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 8px 0 5px;
+        }
+
+        .popup-content .popup-text {
+            font-family: 'Comic Neue', cursive;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .leaflet-control-zoom {
+            display: none;
+        }
+
+        /* ===== TIMELINE SECTION ===== */
+        .timeline-section {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 30px;
+        }
+
+        .timeline-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 2px solid var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 25px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .timeline-item .year {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .timeline-item .event {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            background: var(--bg-dark);
+            color: white;
+            text-align: center;
+            padding: 50px 30px;
+            margin-top: 80px;
+        }
+
+        .site-footer p {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        /* Scrollbar */
+        .story-panel::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .story-panel::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="logo">The Geographic Story</div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-label">A Visual Biography</div>
+        <h1>The Journey of Gandhi</h1>
+        <p class="subtitle">Tracing the footsteps of Mahatma Gandhi across three continents — from a small coastal town
+            in India to the world stage of freedom.</p>
+        <p class="byline">By <span>Visual Stories Team</span> • February 2026</p>
+    </section>
+
+    <!-- INTRO CONTENT -->
+    <article class="article-content">
+        <p class="lead">
+            Mohandas Karamchand Gandhi was not just a leader — he was a journey. His life took him across oceans and
+            continents, each place shaping the philosophy that would eventually free a nation.
+        </p>
+
+        <p class="drop-cap">
+            Born in 1869 in Porbandar, a small coastal town on the western edge of India, Gandhi's early life gave
+            little indication of the revolutionary he would become. Yet it was his <span class="highlight-text">travels
+                across three continents</span> that transformed a shy lawyer into the Father of a Nation.
+        </p>
+
+        <p>
+            This story traces those movements — not just as dots on a map, but as turning points in history. Each
+            location represents a chapter in Gandhi's evolution: from student to activist, from lawyer to leader, from
+            individual to icon.
+        </p>
+    </article>
+
+    <!-- DATA SECTION -->
+    <section class="data-section">
+        <h2>The Numbers Behind the Journey</h2>
+        <div class="data-cards">
+            <div class="data-card">
+                <div class="value">79</div>
+                <div class="label">Years of Life</div>
+            </div>
+            <div class="data-card">
+                <div class="value">13</div>
+                <div class="label">Key Locations</div>
+            </div>
+            <div class="data-card">
+                <div class="value">3</div>
+                <div class="label">Continents</div>
+            </div>
+            <div class="data-card">
+                <div class="value">21</div>
+                <div class="label">Years Abroad</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAP SECTION -->
+    <section class="map-section">
+        <h2>Follow the Journey</h2>
+        <p class="section-intro">Click on any event to see where it happened. Watch as the map takes you across the
+            world, following Gandhi's footsteps.</p>
+
+        <div class="map-container">
+            <div id="map"></div>
+            <div class="story-panel" id="storyPanel">
+                <!-- Steps will be added here -->
+                <div class="story-panel-spacer"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MORE CONTENT -->
+    <article class="article-content">
+        <h2>The Return Home</h2>
+        <p>
+            After 21 years abroad, Gandhi returned to India in 1915 a transformed man. The shy lawyer who had left was
+            now a seasoned activist, armed with a philosophy of non-violent resistance that would shake an empire.
+        </p>
+        <p>
+            His strategy was deliberate. He began not in the centers of power, but at the margins — with indigo farmers
+            in Champaran, with textile workers in Ahmedabad. He built from the ground up, understanding that true
+            freedom had to include everyone.
+        </p>
+    </article>
+
+    <!-- TIMELINE -->
+    <section class="timeline-section">
+        <h2>Key Milestones</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="year">1869</div>
+                <div class="event">Born in Porbandar, Gujarat</div>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1893</div>
+                <div class="event">Experiences racism in South Africa — begins activism</div>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1915</div>
+                <div class="event">Returns to India after 21 years</div>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1930</div>
+                <div class="event">Leads the Salt March — a turning point</div>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1947</div>
+                <div class="event">India gains independence</div>
+            </div>
+            <div class="timeline-item">
+                <div class="year">1948</div>
+                <div class="event">Assassinated while advocating for peace</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer">
+        <p>A scrollytelling experience exploring the geographic journey of Mahatma Gandhi.</p>
+        <p style="margin-top: 15px;">Data sourced from historical records • Built with Leaflet.js</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ========== STORY DATA ==========
+        const storyData = [
+            { year: 1869, place: "Porbandar, Gujarat", lat: 21.6417, lng: 69.6293, zoom: 8, text: "Gandhi is born in a small coastal town in Gujarat." },
+            { year: 1888, place: "London, England", lat: 51.5072, lng: -0.1276, zoom: 7, text: "He travels to London to study law." },
+            { year: 1893, place: "Durban, South Africa", lat: -29.8587, lng: 31.0218, zoom: 7, text: "He faces racial discrimination for the first time." },
+            { year: 1906, place: "Johannesburg, SA", lat: -26.2041, lng: 28.0473, zoom: 7, text: "He starts Satyagraha — peaceful resistance." },
+            { year: 1915, place: "Mumbai, India", lat: 19.0760, lng: 72.8777, zoom: 7, text: "He returns home after 21 years abroad." },
+            { year: 1917, place: "Champaran, Bihar", lat: 26.8500, lng: 84.9200, zoom: 8, text: "He leads his first major protest for farmers." },
+            { year: 1918, place: "Ahmedabad, Gujarat", lat: 23.0225, lng: 72.5714, zoom: 8, text: "He helps textile workers win fair wages." },
+            { year: 1920, place: "Nagpur, India", lat: 21.1458, lng: 79.0882, zoom: 7, text: "He launches the Non-Cooperation Movement." },
+            { year: 1930, place: "Dandi, Gujarat", lat: 20.7179, lng: 72.8552, zoom: 9, text: "He leads the famous Salt March." },
+            { year: 1931, place: "London, England", lat: 51.5072, lng: -0.1276, zoom: 7, text: "He represents India at Round Table talks." },
+            { year: 1942, place: "Mumbai, India", lat: 19.0760, lng: 72.8777, zoom: 7, text: "He launches the Quit India Movement." },
+            { year: 1947, place: "New Delhi, India", lat: 28.6139, lng: 77.2090, zoom: 8, text: "India finally gains independence!" },
+            { year: 1948, place: "New Delhi, India", lat: 28.6139, lng: 77.2090, zoom: 9, text: "Gandhi is assassinated while praying for peace." }
+        ];
+
+        // ========== MAP SETUP ==========
+        const map = L.map('map', {
+            zoomControl: false,
+            attributionControl: false
+        }).setView([22, 78], 5);
+
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map);
+
+        // Add markers
+        const markers = storyData.map((s) => {
+            return L.circleMarker([s.lat, s.lng], {
+                radius: 7,
+                fillColor: '#c41e3a',
+                fillOpacity: 0.7,
+                color: '#fff',
+                weight: 2
+            }).addTo(map);
+        });
+
+        // ========== GENERATE STEPS ==========
+        const storyPanel = document.getElementById('storyPanel');
+        const spacer = storyPanel.querySelector('.story-panel-spacer');
+        let activeIndex = -1;
+        let currentPopup = null;
+
+        storyData.forEach((step, index) => {
+            const div = document.createElement('div');
+            div.className = 'story-step';
+            div.dataset.index = index;
+            div.innerHTML = `
+                <div class="year">${step.year}</div>
+                <div class="place">${step.place}</div>
+                <div class="text">${step.text}</div>
+            `;
+            div.addEventListener('click', () => activateStep(index));
+            storyPanel.insertBefore(div, spacer);
+        });
+
+        const steps = document.querySelectorAll('.story-step');
+
+        // ========== ACTIVATE STEP ==========
+        function activateStep(index) {
+            if (index < 0 || index >= storyData.length) return;
+            activeIndex = index;
+
+            steps.forEach((s, i) => s.classList.toggle('active', i === index));
+
+            const step = storyData[index];
+            map.flyTo([step.lat, step.lng], step.zoom, { duration: 1.2 });
+
+            markers.forEach((m, i) => {
+                m.setStyle({
+                    radius: i === index ? 12 : 7,
+                    fillOpacity: i === index ? 1 : 0.5
+                });
+            });
+
+            if (currentPopup) map.closePopup(currentPopup);
+
+            setTimeout(() => {
+                currentPopup = L.popup({ closeButton: false, offset: [0, -12] })
+                    .setLatLng([step.lat, step.lng])
+                    .setContent(`
+                    <div class="popup-content">
+                        <div class="popup-year">${step.year}</div>
+                        <div class="popup-place">${step.place}</div>
+                        <div class="popup-text">${step.text}</div>
+                    </div>
+                `)
+                    .openOn(map);
+            }, 600);
+        }
+
+        // Activate first step on load
+        setTimeout(() => activateStep(0), 500);
+
+        // Scroll detection in story panel
+        storyPanel.addEventListener('scroll', () => {
+            const panelRect = storyPanel.getBoundingClientRect();
+            const centerY = panelRect.top + panelRect.height / 2;
+
+            steps.forEach((step, index) => {
+                const stepRect = step.getBoundingClientRect();
+                if (stepRect.top <= centerY && stepRect.bottom >= centerY) {
+                    if (index !== activeIndex) {
+                        activateStep(index);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
