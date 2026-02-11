@@ -1,0 +1,62 @@
+{
+  "meta": { "title": "Narendra Modi – A Geographic Biography | The Story" },
+  "header": { "logo": "The Geographic Story" },
+  "hero": {
+    "label": "A Visual Biography",
+    "title": "The Journey of Narendra Modi",
+    "subtitle": "From Vadnagar to Ahmedabad and Delhi — the places that shaped the tea-seller's son who became India's Prime Minister.",
+    "author": "Visual Stories Team",
+    "date": "February 2026"
+  },
+  "articleIntro": {
+    "lead": "Narendra Modi is not just a prime minister — he is a journey. His life moved from a small town in Gujarat to the RSS and BJP, from the chief minister's office in Gandhinagar to 7 Lok Kalyan Marg in New Delhi.",
+    "dropCap": "Born in 1950 in Vadnagar, Gujarat, Modi helped at his father's tea stall as a boy. He joined the RSS as a youth, worked for the BJP, and became chief minister of Gujarat for 13 years before leading the party to victory in 2014 and 2019.",
+    "dropCapHighlight": "chief minister of Gujarat for 13 years before leading the party to victory",
+    "paragraph": "This story traces those locations: the town where he grew up, the cities where he built his political career, and the capital where he has governed India since 2014. Each place is a chapter in a rise from the margins to the center of power."
+  },
+  "dataSection": {
+    "title": "The Numbers Behind the Journey",
+    "cards": [
+      { "value": "2014", "label": "First PM Term" },
+      { "value": "13", "label": "Years as Gujarat CM" },
+      { "value": "2", "label": "Full Terms as PM" },
+      { "value": "9", "label": "Key Locations" }
+    ]
+  },
+  "mapSection": { "intro": "Scroll to follow Modi's journey. The map updates with each chapter." },
+  "articleReturn": {
+    "title": "Prime Minister of India",
+    "paragraphs": [
+      "As Prime Minister, Modi has launched initiatives from Swachh Bharat to Make in India and the construction of the new Parliament and Ram Temple. His government has focused on infrastructure, digital India, and a more assertive foreign policy.",
+      "His journey — Vadnagar, Ahmedabad, Gandhinagar, Delhi — is the map of a political career built on organization, communication, and a narrative of development and national pride. The geography of Narendra Modi is the geography of modern India's central leadership."
+    ]
+  },
+  "timeline": {
+    "title": "Key Milestones",
+    "items": [
+      { "year": "1950", "event": "Born in Vadnagar, Gujarat" },
+      { "year": "1960s", "event": "Joins RSS; runs tea stall with brother" },
+      { "year": "1970s–1980s", "event": "Full-time RSS and BJP worker" },
+      { "year": "2001", "event": "Chief Minister of Gujarat" },
+      { "year": "2014", "event": "Elected Prime Minister; BJP majority" },
+      { "year": "2019", "event": "Re-elected with larger majority" },
+      { "year": "2024", "event": "Third term as PM" }
+    ]
+  },
+  "footer": {
+    "lines": [
+      "A scrollytelling experience exploring the geographic journey of Narendra Modi.",
+      "Data sourced from public records and news • Built with Leaflet.js"
+    ]
+  },
+  "storyData": [
+    { "year": 1950, "place": "Vadnagar, Gujarat", "lat": 23.7856, "lng": 72.6311, "zoom": 13, "text": "Narendra Damodardas Modi is born in Vadnagar, a small town in north Gujarat. His father ran a tea stall; the family belonged to the Ghanchi (oil-presser) community.", "detail": "Modi helped at the stall and later ran one with his brother at a bus stand. He was drawn to the Rashtriya Swayamsevak Sangh (RSS) as a teenager and left home in his late teens to work for the organization. He would later describe his humble origins as central to his identity." },
+    { "year": 1967, "place": "Ahmedabad", "lat": 23.0225, "lng": 72.5714, "zoom": 11, "text": "Modi moves to Ahmedabad and deepens his involvement with the RSS. He runs a tea stall at the state transport office and studies by correspondence.", "detail": "He completed a degree in political science from Delhi University and an MA from Gujarat University, both through distance learning. He rose within the RSS and later the BJP, organizing campaigns and building a reputation as an efficient and disciplined worker." },
+    { "year": 1990, "place": "Ahmedabad – BJP Rise", "lat": 23.0225, "lng": 72.5714, "zoom": 11, "text": "Modi works for the BJP in Gujarat and nationally. He is credited with strengthening the party's organization and playing a role in the Ram Janmabhoomi movement.", "detail": "He became a key strategist and was sent to the BJP headquarters in Delhi. When the BJP came to power in Gujarat in the 1990s, Modi was involved in party affairs. In 2001, after the earthquake and political turmoil, the party leadership chose him to replace Keshubhai Patel as chief minister." },
+    { "year": 2001, "place": "Gandhinagar – Chief Minister", "lat": 23.2156, "lng": 72.6369, "zoom": 12, "text": "Narendra Modi is sworn in as Chief Minister of Gujarat in October 2001. He would hold the post for 13 years.", "detail": "His tenure was marked by controversy over the 2002 riots and by a focus on development, investment, and governance. He won three successive assembly elections. The 'Gujarat model' of development became his calling card and the basis for his national campaign in 2014." },
+    { "year": 2013, "place": "Gandhinagar – PM Candidacy", "lat": 23.2156, "lng": 72.6369, "zoom": 12, "text": "The BJP names Modi as its prime ministerial candidate for the 2014 general election. He campaigns across India from Gujarat as his base.", "detail": "He resigned as chief minister in May 2014 after leading the BJP to a historic majority in the Lok Sabha. He contested from Varanasi and won. His campaign emphasized development, governance, and a strong national narrative." },
+    { "year": 2014, "place": "New Delhi – PMO", "lat": 28.6139, "lng": 77.2090, "zoom": 12, "text": "Narendra Modi is sworn in as the 14th Prime Minister of India on 26 May 2014. He moves to 7 Race Course Road (now 7 Lok Kalyan Marg).", "detail": "His government launched initiatives including Swachh Bharat, Make in India, and Digital India. He traveled widely, building ties with the US, Japan, and others. In 2016 he oversaw demonetization; in 2019 the BJP won an even larger majority and he began a second term." },
+    { "year": 2019, "place": "New Delhi – Second Term", "lat": 28.6139, "lng": 77.2090, "zoom": 12, "text": "Modi is re-elected with a larger majority. His second term sees the abrogation of Article 370, the Citizenship Amendment Act, and the construction of the Ram Temple in Ayodhya.", "detail": "The COVID-19 pandemic and lockdowns defined much of the term. In 2024 he led the NDA to a third consecutive victory, though the BJP fell short of a majority on its own. He was sworn in for a third term as Prime Minister, with his journey from Vadnagar to Delhi remaining the defining arc of his political life." },
+    { "year": 2024, "place": "New Delhi – Third Term", "lat": 28.6139, "lng": 77.2090, "zoom": 12, "text": "Narendra Modi takes oath for a third term as Prime Minister in June 2024. He leads a coalition government from the capital.", "detail": "His story — from a tea stall in Vadnagar to the highest office in India — has made him one of the most dominant figures in modern Indian politics. The geography of his life — Gujarat and Delhi — is the geography of power, development, and the narrative of a rising India." }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "meta": { "title": "Elon Musk – A Geographic Biography | The Story" },
+  "header": { "logo": "The Geographic Story" },
+  "hero": {
+    "label": "A Visual Biography",
+    "title": "The Journey of Elon Musk",
+    "subtitle": "From Pretoria to Silicon Valley, from near bankruptcy to space and electric cars — the places behind the world's richest person.",
+    "author": "Visual Stories Team",
+    "date": "February 2026"
+  },
+  "articleIntro": {
+    "lead": "Elon Musk is not just a billionaire — he is a journey. His life has crossed three continents, from a childhood in South Africa to Canada, California, and Texas, with each move marking a bet on the future: the internet, electric cars, and rockets.",
+    "dropCap": "Born in 1971 in Pretoria, South Africa, Elon grew up in a country riven by apartheid. His path out — via Canada and Pennsylvania — led to Silicon Valley, where he co-founded Zip2 and PayPal, then risked everything on SpaceX and Tesla.",
+    "dropCapHighlight": "Zip2 and PayPal, then risked everything on SpaceX and Tesla",
+    "paragraph": "This story traces those locations: the cities where he was born, studied, sold his first companies, and built the ones that would define him. From rocket launches in Florida to Gigafactories in Texas, the map is the story of relentless motion and ambition."
+  },
+  "dataSection": {
+    "title": "The Numbers Behind the Journey",
+    "cards": [
+      { "value": "3", "label": "Continents" },
+      { "value": "6+", "label": "Companies Led" },
+      { "value": "2", "label": "Near-Bankruptcy Moments" },
+      { "value": "2008", "label": "Darkest Year" }
+    ]
+  },
+  "mapSection": { "intro": "Scroll to follow Elon's journey. The map updates with each chapter." },
+  "articleReturn": {
+    "title": "From the Brink to the Top",
+    "paragraphs": [
+      "In 2008, SpaceX had three failed launches and Tesla was burning cash. Musk was sleeping on the factory floor and running both companies. The fourth Falcon 1 flight succeeded; NASA gave SpaceX a contract; Tesla survived and went public.",
+      "His later moves — Gigafactories in Texas and Berlin, Starlink, Neuralink, the xAI bet — have kept the map expanding. The geography of Elon Musk is still being drawn: South Africa to Canada to California to Texas, and from Earth to Mars."
+    ]
+  },
+  "timeline": {
+    "title": "Key Milestones",
+    "items": [
+      { "year": "1971", "event": "Born in Pretoria, South Africa" },
+      { "year": "1989", "event": "Moves to Canada, attends Queen's University" },
+      { "year": "1992", "event": "Transfers to University of Pennsylvania" },
+      { "year": "1995", "event": "Moves to Silicon Valley, starts Zip2" },
+      { "year": "1999", "event": "Sells Zip2 to Compaq for $307M" },
+      { "year": "2002", "event": "eBay buys PayPal; Musk founds SpaceX in Hawthorne" },
+      { "year": "2004", "event": "Joins Tesla as chairman" },
+      { "year": "2008", "event": "SpaceX succeeds; Tesla near collapse" },
+      { "year": "2012", "event": "Dragon docks with ISS" },
+      { "year": "2020", "event": "Musk moves to Texas; becomes world's richest" },
+      { "year": "2022", "event": "Acquires Twitter (X)" }
+    ]
+  },
+  "footer": {
+    "lines": [
+      "A scrollytelling experience exploring the geographic journey of Elon Musk.",
+      "Data sourced from biographies and public records • Built with Leaflet.js"
+    ]
+  },
+  "storyData": [
+    { "year": 1971, "place": "Pretoria, South Africa", "lat": -25.7479, "lng": 28.2293, "zoom": 11, "text": "Elon Reeve Musk is born in Pretoria. He spends his childhood in South Africa under apartheid, reading science fiction and teaching himself to code.", "detail": "His parents divorced when he was young. He was bullied at school and found escape in books and computers. At 10 he taught himself BASIC; at 12 he sold his first game, Blastar. His desire to leave South Africa — and eventually reach the United States — would drive his early moves to Canada and then Pennsylvania." },
+    { "year": 1989, "place": "Kingston, Canada", "lat": 44.2312, "lng": -76.4860, "zoom": 12, "text": "Musk moves to Canada to avoid mandatory service in the South African military. He attends Queen's University in Kingston, Ontario.", "detail": "Canada was a stepping stone to the U.S. He stayed with relatives and took odd jobs. After two years at Queen's he transferred to the University of Pennsylvania, where he would earn degrees in economics and physics and lay the groundwork for his first startups." },
+    { "year": 1992, "place": "Philadelphia, Pennsylvania", "lat": 39.9526, "lng": -75.1652, "zoom": 12, "text": "Musk studies at the University of Pennsylvania — Wharton and physics. He writes a thesis on energy density and the potential of solar and batteries.", "detail": "At Penn he explored ideas that would later define Tesla and SolarCity: sustainable energy, batteries, and the economics of clean tech. After graduation he deferred Stanford and drove to Silicon Valley to join the dot-com boom." },
+    { "year": 1995, "place": "Palo Alto – Zip2", "lat": 37.4419, "lng": -122.1430, "zoom": 12, "text": "Musk co-founds Zip2 with his brother Kimbal. The company builds online city guides for newspapers; offices are in Palo Alto.", "detail": "Zip2 struggled at first — Musk slept in the office and used the YMCA to shower. Compaq acquired Zip2 in 1999 for $307 million. Musk used his share to co-found X.com, which became PayPal after a merger. PayPal's sale to eBay in 2002 gave him the capital for SpaceX and Tesla." },
+    { "year": 1999, "place": "San Jose – PayPal", "lat": 37.3382, "lng": -121.8863, "zoom": 11, "text": "X.com (later PayPal) is based in San Jose. Musk is CEO until ousted in 2000; he remains the largest shareholder.", "detail": "The merger with Confinity created PayPal. Internal disputes led to Musk being replaced by Peter Thiel. When eBay bought PayPal for $1.5 billion in 2002, Musk's stake was around $180 million. He immediately invested in SpaceX and Tesla." },
+    { "year": 2002, "place": "Hawthorne, California – SpaceX", "lat": 33.9204, "lng": -118.3280, "zoom": 14, "text": "Musk founds Space Exploration Technologies (SpaceX) in Hawthorne, Los Angeles. The goal: reduce the cost of spaceflight and eventually reach Mars.", "detail": "He bought refurbished Russian rockets at first, then decided to build his own. The Falcon 1 was developed in Hawthorne; the first three launches failed. The fourth, in 2008, succeeded. NASA awarded SpaceX a contract to resupply the ISS, and the company became the backbone of American commercial space." },
+    { "year": 2004, "place": "San Carlos – Tesla", "lat": 37.5079, "lng": -122.2630, "zoom": 13, "text": "Musk joins Tesla Motors (founded in San Carlos) as chairman and lead investor. The Roadster is in development.", "detail": "Tesla's first factory was in a small facility in San Carlos. Musk pushed for the Roadster's lithium-ion battery pack and oversaw design. He later became CEO and moved the company to Palo Alto, then Fremont, as production scaled. The Model S, 3, X, and Y would follow." },
+    { "year": 2008, "place": "Hawthorne – Falcon 1 Success", "lat": 33.9204, "lng": -118.3280, "zoom": 14, "text": "The fourth Falcon 1 launch succeeds. NASA awards SpaceX a $1.6 billion contract. Tesla is still burning cash; Musk is running both companies.", "detail": "2008 was his hardest year. SpaceX had three failures; Tesla needed another round of funding. He put his last personal money into both. The successful fourth launch and the NASA contract saved SpaceX. Tesla survived and would go public in 2010." },
+    { "year": 2010, "place": "Cape Canaveral, Florida", "lat": 28.3922, "lng": -80.6077, "zoom": 11, "text": "SpaceX launches the Falcon 9 from Cape Canaveral. The Dragon capsule is tested for NASA's Commercial Orbital Transportation Services program.", "detail": "Cape Canaveral became SpaceX's primary launch site for Falcon 9 and Dragon. Later, Kennedy Space Center's LC-39A would host crewed Dragon flights. Florida is where most of SpaceX's commercial and NASA missions lift off." },
+    { "year": 2012, "place": "Hawthorne – Dragon & ISS", "lat": 33.9204, "lng": -118.3280, "zoom": 14, "text": "Dragon becomes the first commercial spacecraft to dock with the International Space Station. SpaceX is now a key NASA partner.", "detail": "The Dragon cargo missions proved that commercial companies could reliably resupply the ISS. SpaceX would later add Crew Dragon for astronauts. The Hawthorne campus expanded; Starlink and Starship would be developed there and in Texas." },
+    { "year": 2020, "place": "Austin, Texas", "lat": 30.2672, "lng": -97.7431, "zoom": 10, "text": "Musk moves to Texas. Tesla builds Gigafactory Texas in Austin; SpaceX expands in Boca Chica (Starbase). He becomes the world's richest person.", "detail": "Texas offered lower taxes, space for Gigafactories, and a launch site for Starship. Austin hosts Tesla's headquarters and Cybertruck production. Boca Chica is the test site for the largest rocket ever built. His personal and corporate geography had shifted from California to the Lone Star State." },
+    { "year": 2022, "place": "San Francisco – Twitter (X)", "lat": 37.7749, "lng": -122.4194, "zoom": 12, "text": "Musk acquires Twitter for $44 billion. He renames it X and moves the company toward payments and a 'everything app' vision.", "detail": "The acquisition was contentious. He cut staff, changed policies, and faced advertiser pullback. X's headquarters remained in San Francisco (and later partly in Austin). The deal reflected his desire to shape public discourse and platform economics — another chapter in a career built on big bets and new geographies." }
+  ]
+}

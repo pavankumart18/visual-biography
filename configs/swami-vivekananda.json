@@ -1,0 +1,66 @@
+{
+  "meta": { "title": "Swami Vivekananda – A Geographic Biography | The Story" },
+  "header": { "logo": "The Geographic Story" },
+  "hero": {
+    "label": "A Visual Biography",
+    "title": "The Journey of Swami Vivekananda",
+    "subtitle": "From Calcutta to Chicago and back — the monk who brought Vedanta to the world and became the voice of India at the Parliament of Religions.",
+    "author": "Visual Stories Team",
+    "date": "February 2026"
+  },
+  "articleIntro": {
+    "lead": "Swami Vivekananda was not just a monk — he was a journey. His life took him from the streets of Calcutta to the Himalayas, from Madras to America and Europe, carrying the message of Vedanta and the spiritual unity of humanity.",
+    "dropCap": "Born Narendranath Datta in 1863 in Calcutta, he grew up in a cultured Bengali family. His meeting with Sri Ramakrishna, his travels across India as a wandering monk, and his historic speech in Chicago in 1893 would define him as one of India's greatest spiritual ambassadors.",
+    "dropCapHighlight": "historic speech in Chicago in 1893",
+    "paragraph": "This story traces those locations: the places where he studied, sought truth, met his guru, wandered as a monk, and spoke to the world. Each place is a chapter in a life dedicated to service, Vedanta, and the idea that all religions lead to the same truth."
+  },
+  "dataSection": {
+    "title": "The Numbers Behind the Journey",
+    "cards": [
+      { "value": "39", "label": "Years of Life" },
+      { "value": "12", "label": "Key Locations" },
+      { "value": "3", "label": "Continents" },
+      { "value": "1893", "label": "Chicago Parliament" }
+    ]
+  },
+  "mapSection": { "intro": "Scroll to follow Vivekananda's journey. The map updates with each chapter." },
+  "articleReturn": {
+    "title": "Return to India and Legacy",
+    "paragraphs": [
+      "After his triumph in the West, Vivekananda returned to India in 1897 and was received as a hero. He founded the Ramakrishna Mission for service and education and continued to travel and teach until his death in 1902.",
+      "His message — that each soul is potentially divine, that service to humanity is worship, and that the West could learn from Indian spirituality while India could learn from Western science and organization — continues to inspire millions. The geography of his life is the map of a bridge between East and West."
+    ]
+  },
+  "timeline": {
+    "title": "Key Milestones",
+    "items": [
+      { "year": "1863", "event": "Born in Calcutta (Kolkata)" },
+      { "year": "1881", "event": "Meets Sri Ramakrishna at Dakshineswar" },
+      { "year": "1886", "event": "Ramakrishna passes; Narendranath becomes monk" },
+      { "year": "1890–1893", "event": "Wanders across India as Vivekananda" },
+      { "year": "1893", "event": "Speaks at World's Parliament of Religions, Chicago" },
+      { "year": "1894–1896", "event": "Lectures across USA and UK" },
+      { "year": "1897", "event": "Returns to India; founds Ramakrishna Mission" },
+      { "year": "1899", "event": "Second visit to the West" },
+      { "year": "1902", "event": "Passes away at Belur Math" }
+    ]
+  },
+  "footer": {
+    "lines": [
+      "A scrollytelling experience exploring the geographic journey of Swami Vivekananda.",
+      "Data sourced from historical records • Built with Leaflet.js"
+    ]
+  },
+  "storyData": [
+    { "year": 1863, "place": "Kolkata (Calcutta), India", "lat": 22.5726, "lng": 88.3639, "zoom": 11, "text": "Narendranath Datta is born in Calcutta into a progressive Bengali family. His father was an attorney; his mother was devout and cultured.", "detail": "He showed an early interest in philosophy and meditation. He attended the Metropolitan Institution and later the Scottish Church College. As a young man he was drawn to the Brahmo Samaj and questioned orthodox religion. His search for a guru who had seen God would lead him to Dakshineswar and Sri Ramakrishna." },
+    { "year": 1881, "place": "Dakshineswar, Kolkata", "lat": 22.6558, "lng": 88.3583, "zoom": 14, "text": "Narendranath meets Sri Ramakrishna at the Dakshineswar Kali Temple. After initial skepticism, he accepts Ramakrishna as his master.", "detail": "Ramakrishna recognized in Narendranath a future spiritual leader. Under his guidance, Narendranath experienced deep meditation and the vision of the divine. After Ramakrishna's death in 1886, Narendranath and other disciples took monastic vows and became the first monks of the Ramakrishna order." },
+    { "year": 1890, "place": "Varanasi, India", "lat": 25.3176, "lng": 82.9739, "zoom": 12, "text": "As a wandering monk, Vivekananda travels to Varanasi, then across North India. He witnesses poverty and resolves to serve the masses.", "detail": "His travels took him from the Himalayas to Kanyakumari. He went by different names before settling on Vivekananda. In the course of his journey he decided that India needed both spiritual awakening and material progress — education, health, and self-reliance. The idea of the Ramakrishna Mission took shape during these years." },
+    { "year": 1892, "place": "Kanyakumari, India", "lat": 8.0863, "lng": 77.5385, "zoom": 12, "text": "Vivekananda meditates on the rock off Kanyakumari (then Cape Comorin). He receives the call to take India's message to the West.", "detail": "He swam to the rock and meditated for hours. The vision of a unified India and the need to present Vedanta to the world crystallized here. Soon after, he learned of the World's Parliament of Religions in Chicago and resolved to attend. Supporters in Madras and elsewhere raised funds for his passage." },
+    { "year": 1893, "place": "Chicago, USA", "lat": 41.8781, "lng": -87.6298, "zoom": 12, "text": "At the World's Parliament of Religions, Vivekananda opens with 'Sisters and Brothers of America' and becomes the star of the event.", "detail": "His speech introduced Hinduism and Vedanta to a global audience. He spoke of tolerance, the unity of religions, and the spiritual heritage of India. The press and the public were captivated. He would spend the next few years lecturing across America and Britain, founding Vedanta societies and inspiring countless seekers." },
+    { "year": 1894, "place": "New York, USA", "lat": 40.7128, "lng": -74.0060, "zoom": 11, "text": "Vivekananda lectures in New York and other American cities. He founds the Vedanta Society and writes and speaks on Raja Yoga and Vedanta.", "detail": "His classes and books introduced Western audiences to meditation, karma, and the idea of the divinity of the soul. He attracted followers and critics alike. His message that all paths lead to the same truth resonated with many in the West and established a lasting bridge between Indian spirituality and American religious life." },
+    { "year": 1895, "place": "London, UK", "lat": 51.5072, "lng": -0.1276, "zoom": 10, "text": "Vivekananda lectures in London. He meets Margaret Noble (later Sister Nivedita), who would dedicate her life to India and education.", "detail": "His talks in Britain drew intellectuals and the curious. Nivedita became his disciple and later moved to India, where she worked for women's education and the cause of Indian independence. Vivekananda's influence extended beyond spirituality into education and nationalism." },
+    { "year": 1897, "place": "Kolkata – Ramakrishna Mission", "lat": 22.5726, "lng": 88.3639, "zoom": 12, "text": "Vivekananda returns to India and founds the Ramakrishna Mission at Belur. He emphasizes service, education, and the uplift of the poor.", "detail": "He was welcomed with enthusiasm. The Mission combined monastic life with active service — running schools, hospitals, and relief work. His message of 'arise, awake, and stop not till the goal is reached' inspired a generation. He continued to travel and teach despite declining health." },
+    { "year": 1898, "place": "Belur Math, West Bengal", "lat": 22.5043, "lng": 88.2534, "zoom": 14, "text": "The Ramakrishna Math is established at Belur on the Ganges. It becomes the headquarters of the Ramakrishna order.", "detail": "Belur Math was designed to symbolize the harmony of religions — its architecture incorporates elements from different traditions. Vivekananda spent his last years here, guiding the order and receiving visitors. He passed away in 1902 at the age of 39, leaving a legacy that continues to shape spiritual and social work in India and abroad." },
+    { "year": 1902, "place": "Belur Math", "lat": 22.5043, "lng": 88.2534, "zoom": 14, "text": "Swami Vivekananda passes away at Belur Math on 4 July 1902. He is remembered as the monk who brought Vedanta to the world.", "detail": "His last days were spent in meditation and teaching. His message — of the divinity of the soul, the unity of religions, and service to humanity — has inspired the Ramakrishna Mission, countless individuals, and the idea of India's spiritual contribution to the world. His journey from Calcutta to Chicago and back remains a defining story of modern Hinduism." }
+  ]
+}

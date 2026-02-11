@@ -1,0 +1,67 @@
+{
+  "meta": { "title": "Nelson Mandela – A Geographic Biography | The Story" },
+  "header": { "logo": "The Geographic Story" },
+  "hero": {
+    "label": "A Visual Biography",
+    "title": "The Journey of Nelson Mandela",
+    "subtitle": "From the hills of Qunu to Robben Island, Pretoria, and the Union Buildings — the places that shaped the man who ended apartheid and became South Africa's first Black president.",
+    "author": "Visual Stories Team",
+    "date": "February 2026"
+  },
+  "articleIntro": {
+    "lead": "Nelson Mandela was not just a president — he was a journey. His life moved from the rural Eastern Cape to Johannesburg, from the courtroom to the prison cell, and from Robben Island to the seat of power in Pretoria.",
+    "dropCap": "Born in 1918 in Mvezo and raised in Qunu, Mandela left for Johannesburg as a young man. There he became a lawyer, joined the African National Congress, and was imprisoned for 27 years before leading South Africa through its first democratic transition.",
+    "dropCapHighlight": "imprisoned for 27 years before leading South Africa through its first democratic transition",
+    "paragraph": "This story traces those locations: the villages of his childhood, the city where he fought apartheid, the prisons where he was held, and the buildings where he was sworn in as president. Each place is a chapter in the geography of resistance and reconciliation."
+  },
+  "dataSection": {
+    "title": "The Numbers Behind the Journey",
+    "cards": [
+      { "value": "95", "label": "Years of Life" },
+      { "value": "27", "label": "Years in Prison" },
+      { "value": "1994", "label": "First Democratic Election" },
+      { "value": "1", "label": "Nobel Peace Prize" }
+    ]
+  },
+  "mapSection": { "intro": "Scroll to follow Mandela's journey. The map updates with each chapter." },
+  "articleReturn": {
+    "title": "President and Legacy",
+    "paragraphs": [
+      "Mandela served one term as president and focused on reconciliation, the Truth and Reconciliation Commission, and laying the foundations for a new South Africa. After leaving office he continued to work on peace, HIV/AIDS, and children's rights.",
+      "His journey — Qunu, Johannesburg, Robben Island, Pollsmoor, Victor Verster, Pretoria — is the map of a life that moved from village to prison to presidency. The geography of Nelson Mandela is the geography of the struggle for freedom and the long walk to a new nation."
+    ]
+  },
+  "timeline": {
+    "title": "Key Milestones",
+    "items": [
+      { "year": "1918", "event": "Born in Mvezo, Eastern Cape" },
+      { "year": "1941", "event": "Moves to Johannesburg; meets Walter Sisulu" },
+      { "year": "1944", "event": "Joins ANC; co-founds ANC Youth League" },
+      { "year": "1952", "event": "Defiance Campaign; opens law practice" },
+      { "year": "1962", "event": "Arrested; Rivonia Trial follows" },
+      { "year": "1964", "event": "Sentenced to life; sent to Robben Island" },
+      { "year": "1990", "event": "Released from prison" },
+      { "year": "1994", "event": "Elected first Black president of South Africa" },
+      { "year": "2013", "event": "Dies in Johannesburg" }
+    ]
+  },
+  "footer": {
+    "lines": [
+      "A scrollytelling experience exploring the geographic journey of Nelson Mandela.",
+      "Data sourced from historical records and memoirs • Built with Leaflet.js"
+    ]
+  },
+  "storyData": [
+    { "year": 1918, "place": "Mvezo & Qunu, Eastern Cape", "lat": -31.7833, "lng": 28.6167, "zoom": 11, "text": "Rolihlahla Mandela is born in Mvezo. After his father's fall from grace, the family moves to Qunu, where he spends his childhood.", "detail": "He was given the name Nelson at school. Qunu was a village of huts, cattle, and traditional Xhosa life. His mother was devout; his guardian, the regent of the Thembu, prepared him for a role in leadership. The hills of the Eastern Cape remained his spiritual home throughout his life." },
+    { "year": 1939, "place": "Fort Hare University", "lat": -32.7892, "lng": 26.8486, "zoom": 13, "text": "Mandela enrolls at the University of Fort Hare, the only university for Black South Africans. He is expelled for protesting and leaves for Johannesburg.", "detail": "At Fort Hare he met Oliver Tambo and others who would become ANC leaders. After his expulsion he avoided an arranged marriage and fled to Johannesburg, where he would work as a mine guard, a law clerk, and eventually a lawyer and activist." },
+    { "year": 1941, "place": "Johannesburg", "lat": -26.2041, "lng": 28.0473, "zoom": 11, "text": "Mandela arrives in Johannesburg. He meets Walter Sisulu, who becomes a lifelong friend and introduces him to the ANC.", "detail": "Johannesburg was the heart of the apartheid economy. Mandela completed his degree by correspondence, trained as a lawyer, and in 1944 joined the ANC and co-founded the ANC Youth League. He and Oliver Tambo opened the first Black law firm in the city, defending those targeted by the regime." },
+    { "year": 1952, "place": "Johannesburg – Defiance Campaign", "lat": -26.2041, "lng": 28.0473, "zoom": 11, "text": "Mandela leads the Defiance Campaign against unjust laws. He is banned and later arrested; the Treason Trial follows.", "detail": "The campaign saw thousands deliberately break apartheid laws. Mandela was charged with treason; the trial dragged on for years and ended in acquittal. In 1960 the Sharpeville massacre led to the banning of the ANC. Mandela went underground and helped form Umkhonto we Sizwe (MK), the armed wing." },
+    { "year": 1962, "place": "Howick – Arrest", "lat": -29.4786, "lng": 30.2306, "zoom": 12, "text": "Mandela is arrested near Howick on 5 August 1962, after 17 months underground. He is charged with incitement and leaving the country illegally.", "detail": "He had traveled in Africa and to London to seek support. Back in South Africa he was captured by security police. The Rivonia Trial followed, in which he and others were charged with sabotage. Facing the death penalty, Mandela gave the 'I am prepared to die' speech and was sentenced to life imprisonment." },
+    { "year": 1964, "place": "Robben Island", "lat": -33.8064, "lng": 18.3683, "zoom": 13, "text": "Mandela is sent to Robben Island, where he will spend 18 years. Prisoners did hard labour; he studied and led the political prisoners.", "detail": "The island was cold, harsh, and designed to break spirits. Mandela refused to compromise his principles and became the moral leader of the prisoners. He studied law, gardened, and maintained contact with the outside world through visits and letters. His stature grew even as the regime tried to erase him from public memory." },
+    { "year": 1982, "place": "Pollsmoor Prison, Cape Town", "lat": -34.0736, "lng": 18.4481, "zoom": 12, "text": "Mandela is moved to Pollsmoor Prison on the mainland. Secret talks with the government begin.", "detail": "The move was partly to reduce his influence on younger prisoners and partly to facilitate contact with officials. Over the following years, Mandela engaged in confidential negotiations, insisting on the principle of one person, one vote. The world campaign for his release intensified." },
+    { "year": 1988, "place": "Victor Verster Prison", "lat": -33.9167, "lng": 18.8667, "zoom": 12, "text": "Mandela is transferred to Victor Verster, where he has a house and more freedom. Final negotiations for his release take place.", "detail": "He could meet more easily with government and ANC representatives. On 11 February 1990 he walked free, hand in hand with his wife Winnie, into a crowd in Cape Town. The image was broadcast around the world. South Africa had begun the journey to democracy." },
+    { "year": 1990, "place": "Cape Town – Release", "lat": -33.9249, "lng": 18.4241, "zoom": 12, "text": "Nelson Mandela is released from prison. He addresses the nation from the balcony of Cape Town's city hall.", "detail": "He called for peace and for the continuation of the struggle through negotiation. The ANC was unbanned; the long process of dismantling apartheid and writing a new constitution had started. Mandela would lead the ANC in talks and then in the first democratic election." },
+    { "year": 1994, "place": "Pretoria – Union Buildings", "lat": -25.7410, "lng": 28.2120, "zoom": 14, "text": "On 10 May 1994, Nelson Mandela is inaugurated as the first Black president of South Africa at the Union Buildings in Pretoria.", "detail": "The election had been peaceful; millions had voted for the first time. Mandela spoke of reconciliation and a rainbow nation. He served one term, stepped down in 1999, and continued to work on global causes. His journey from Qunu to Robben Island to the Union Buildings remains the defining arc of modern South African history." },
+    { "year": 2013, "place": "Johannesburg", "lat": -26.2041, "lng": 28.0473, "zoom": 11, "text": "Nelson Mandela dies in Johannesburg on 5 December 2013. He is buried in Qunu in a state funeral attended by world leaders.", "detail": "His death was mourned globally. He was laid to rest in the village where he had grown up, completing a journey that had taken him from the Eastern Cape to prison and to the presidency. The geography of his life — Qunu, Johannesburg, Robben Island, Pretoria — is now the map of a nation's memory." }
+  ]
+}

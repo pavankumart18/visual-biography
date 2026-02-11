@@ -1,0 +1,65 @@
+{
+  "meta": { "title": "Mother Teresa – A Geographic Biography | The Story" },
+  "header": { "logo": "The Geographic Story" },
+  "hero": {
+    "label": "A Visual Biography",
+    "title": "The Journey of Mother Teresa",
+    "subtitle": "From Skopje to Dublin, Kolkata, and the world — the places behind the nun who served the poorest of the poor and became a global symbol of compassion.",
+    "author": "Visual Stories Team",
+    "date": "February 2026"
+  },
+  "articleIntro": {
+    "lead": "Mother Teresa was not just a nun — she was a journey. Her life moved from the Balkans to Ireland and then to India, where she heard the call to serve the destitute and founded the Missionaries of Charity.",
+    "dropCap": "Born Anjezë Gonxhe Bojaxhiu in 1910 in Skopje (now North Macedonia), she left for Ireland as a teenager to join the Sisters of Loreto. She was sent to India, where she taught in Darjeeling and Kolkata before starting her mission in the slums.",
+    "dropCapHighlight": "starting her mission in the slums",
+    "paragraph": "This story traces those locations: the city of her birth, the convent where she trained, the schools where she taught, and the streets of Kolkata where she picked up the dying and built a worldwide order. Each place is a chapter in a life given to the poor."
+  },
+  "dataSection": {
+    "title": "The Numbers Behind the Journey",
+    "cards": [
+      { "value": "87", "label": "Years of Life" },
+      { "value": "1950", "label": "Missionaries of Charity Founded" },
+      { "value": "130+", "label": "Countries (Mission presence)" },
+      { "value": "1979", "label": "Nobel Peace Prize" }
+    ]
+  },
+  "mapSection": { "intro": "Scroll to follow Mother Teresa's journey. The map updates with each chapter." },
+  "articleReturn": {
+    "title": "A Global Mission",
+    "paragraphs": [
+      "From Kolkata, Mother Teresa's order spread to every continent. She opened homes for the dying, lepers, orphans, and the destitute. She met world leaders and spoke at the UN, but she always returned to the streets of Kolkata.",
+      "Her journey — Skopje, Dublin, Darjeeling, Kolkata, Rome, and countless cities where the Missionaries of Charity serve — is the map of a life lived among the poor. The geography of Mother Teresa is the geography of radical charity."
+    ]
+  },
+  "timeline": {
+    "title": "Key Milestones",
+    "items": [
+      { "year": "1910", "event": "Born in Skopje (Ottoman Empire)" },
+      { "year": "1928", "event": "Leaves for Ireland; joins Sisters of Loreto" },
+      { "year": "1929", "event": "Arrives in India; Darjeeling" },
+      { "year": "1931", "event": "First vows; takes name Teresa" },
+      { "year": "1946", "event": "'Call within a call' on train to Darjeeling" },
+      { "year": "1950", "event": "Foundes Missionaries of Charity in Kolkata" },
+      { "year": "1952", "event": "Opens first home for the dying – Nirmal Hriday" },
+      { "year": "1979", "event": "Nobel Peace Prize" },
+      { "year": "1997", "event": "Dies in Kolkata; canonized 2016" }
+    ]
+  },
+  "footer": {
+    "lines": [
+      "A scrollytelling experience exploring the geographic journey of Mother Teresa.",
+      "Data sourced from historical records • Built with Leaflet.js"
+    ]
+  },
+  "storyData": [
+    { "year": 1910, "place": "Skopje (North Macedonia)", "lat": 41.9973, "lng": 21.4280, "zoom": 12, "text": "Anjezë Gonxhe Bojaxhiu is born in Skopje, then part of the Ottoman Empire. Her family was Albanian and Catholic.", "detail": "Her father died when she was young. She felt a call to religious life as a child. At 18 she left Skopje for Ireland to join the Sisters of Loreto, who had missions in India. She would never live in Skopje again, but the city remembers her as its most famous daughter." },
+    { "year": 1928, "place": "Rathfarnham, Dublin, Ireland", "lat": 53.3004, "lng": -6.2644, "zoom": 13, "text": "Gonxhe arrives in Ireland to learn English and prepare for life as a Loreto sister. She is sent to India in 1929.", "detail": "The Loreto order ran schools in India. In Dublin she received the habit and the name Sister Mary Teresa. She sailed to India and was posted to Darjeeling, where she would teach and take her final vows before moving to Kolkata." },
+    { "year": 1929, "place": "Darjeeling, India", "lat": 27.0410, "lng": 88.2663, "zoom": 12, "text": "Sister Teresa arrives in Darjeeling. She teaches at the Loreto convent school and takes her first vows in 1931.", "detail": "Darjeeling was where she became Sister Teresa. She was later assigned to the Loreto Entally school in Kolkata, where she taught geography and history for nearly two decades. In 1946, on a train journey to Darjeeling, she received what she called her 'call within a call' — to leave the convent and serve the poorest in the slums." },
+    { "year": 1948, "place": "Kolkata (Calcutta)", "lat": 22.5726, "lng": 88.3639, "zoom": 11, "text": "After permission from Rome, Sister Teresa leaves the Loreto order and steps into the slums of Kolkata. She adopts a simple white sari with a blue border.", "detail": "She had no money or organization. She taught children in the street, cared for the sick, and begged for food and medicine. In 1950 she founded the Missionaries of Charity. The order would grow to thousands of sisters and brothers serving in more than 130 countries." },
+    { "year": 1952, "place": "Kolkata – Nirmal Hriday", "lat": 22.5726, "lng": 88.3639, "zoom": 14, "text": "Mother Teresa opens Nirmal Hriday (Pure Heart), a home for the dying, in Kalighat. She and her sisters bring the destitute from the streets so they can die with dignity.", "detail": "The home was near the Kali temple. Many of the dying were Hindus; Mother Teresa insisted they receive the rites of their faith. The work was grueling and drew both admiration and criticism. She later opened homes for lepers, orphans, and abandoned children." },
+    { "year": 1965, "place": "Venezuela – First Mission Abroad", "lat": 10.4806, "lng": -66.9036, "zoom": 11, "text": "The Missionaries of Charity open their first house outside India, in Venezuela. The order begins its global expansion.", "detail": "Pope Paul VI had approved the order for expansion. Houses followed in Rome, Tanzania, and across Asia, Africa, and the Americas. Mother Teresa traveled constantly to open new missions and raise funds. She became one of the most recognized figures in the world." },
+    { "year": 1979, "place": "Oslo – Nobel Peace Prize", "lat": 59.9139, "lng": 10.7522, "zoom": 12, "text": "Mother Teresa is awarded the Nobel Peace Prize. She accepts in the name of the poor and asks that the Nobel banquet be cancelled and the money given to the needy.", "detail": "Her speech emphasized that the greatest destroyer of peace is abortion. She used the prize money for her work. The award cemented her status as a global moral voice. She continued to open homes and to serve in Kolkata until her health failed." },
+    { "year": 1986, "place": "New York – Gift of Love", "lat": 40.7128, "lng": -74.0060, "zoom": 11, "text": "Mother Teresa opens a home for AIDS patients in New York — one of many missions in the West. She meets presidents and celebrities but keeps her focus on the poor.", "detail": "She was criticized by some for her views on contraception and for the conditions in some of her homes. She was praised by others for her unwavering commitment. She stepped down as head of the order in 1997 and died in Kolkata that same year." },
+    { "year": 1997, "place": "Kolkata", "lat": 22.5726, "lng": 88.3639, "zoom": 11, "text": "Mother Teresa dies in Kolkata on 5 September 1997. She is given a state funeral; her tomb is at the Mother House of the Missionaries of Charity.", "detail": "She was beatified in 2003 and canonized as Saint Teresa of Calcutta in 2016. Her order continues to run homes and shelters worldwide. Her journey — from Skopje to Dublin to Darjeeling to Kolkata and across the globe — remains the map of a life spent in the service of the poorest of the poor." }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "meta": { "title": "Albert Einstein – A Geographic Biography | The Story" },
+  "header": { "logo": "The Geographic Story" },
+  "hero": {
+    "label": "A Visual Biography",
+    "title": "The Journey of Albert Einstein",
+    "subtitle": "From Ulm to Zurich, Berlin, and Princeton — the places behind the physicist who reshaped space, time, and our view of the universe.",
+    "author": "Visual Stories Team",
+    "date": "February 2026"
+  },
+  "articleIntro": {
+    "lead": "Albert Einstein was not just a scientist — he was a journey. His life moved across Europe and America, from the patent office in Bern to the institutes of Berlin and finally to Princeton, with each place marking a stage in the work that would redefine physics.",
+    "dropCap": "Born in 1879 in Ulm, Germany, Einstein grew up in Munich and later studied in Zurich. His annus mirabilis in Bern, his rise in Berlin, and his flight from Nazism to the United States trace a map of genius and the upheavals of the twentieth century.",
+    "dropCapHighlight": "annus mirabilis in Bern, his rise in Berlin, and his flight from Nazism",
+    "paragraph": "This story traces those locations: the cities where he studied, worked, published the theories of relativity, won the Nobel Prize, and spent his last years. Each place is a chapter in the life of the man who became the face of modern science."
+  },
+  "dataSection": {
+    "title": "The Numbers Behind the Journey",
+    "cards": [
+      { "value": "76", "label": "Years of Life" },
+      { "value": "10", "label": "Key Locations" },
+      { "value": "1905", "label": "Annus Mirabilis" },
+      { "value": "1921", "label": "Nobel Prize" }
+    ]
+  },
+  "mapSection": { "intro": "Scroll to follow Einstein's journey. The map updates with each chapter." },
+  "articleReturn": {
+    "title": "Princeton and Legacy",
+    "paragraphs": [
+      "Einstein spent the last two decades of his life in Princeton, working on unified field theory and speaking out on peace, civil rights, and the dangers of nuclear weapons. He declined the presidency of Israel but remained a symbol of Jewish identity and scientific achievement.",
+      "His journey — Ulm, Munich, Zurich, Bern, Berlin, Princeton — is the map of a mind that changed the world. The places he lived are now pilgrimage sites for those who seek to understand where the ideas of relativity and quantum physics were born."
+    ]
+  },
+  "timeline": {
+    "title": "Key Milestones",
+    "items": [
+      { "year": "1879", "event": "Born in Ulm, Germany" },
+      { "year": "1896", "event": "Enters ETH Zurich" },
+      { "year": "1902", "event": "Patent office in Bern" },
+      { "year": "1905", "event": "Annus mirabilis – relativity, photoelectric effect, Brownian motion" },
+      { "year": "1915", "event": "General relativity completed in Berlin" },
+      { "year": "1921", "event": "Nobel Prize in Physics" },
+      { "year": "1933", "event": "Flees Nazi Germany; settles in USA" },
+      { "year": "1940", "event": "US citizen; Princeton" },
+      { "year": "1955", "event": "Dies in Princeton" }
+    ]
+  },
+  "footer": {
+    "lines": [
+      "A scrollytelling experience exploring the geographic journey of Albert Einstein.",
+      "Data sourced from biographies and historical records • Built with Leaflet.js"
+    ]
+  },
+  "storyData": [
+    { "year": 1879, "place": "Ulm, Germany", "lat": 48.4011, "lng": 9.9876, "zoom": 13, "text": "Albert Einstein is born in Ulm on 14 March 1879. The family moved to Munich when he was an infant.", "detail": "His father ran an electrical engineering business. As a child Einstein was curious and often at odds with the rigid schooling of the time. The family would later move to Italy and then to Switzerland, where Einstein would pursue his education and eventually become a citizen." },
+    { "year": 1896, "place": "Zurich – ETH", "lat": 47.3769, "lng": 8.5417, "zoom": 14, "text": "Einstein enters the Swiss Federal Polytechnic (ETH) in Zurich. He studies physics and mathematics and meets Mileva Marić.", "detail": "He graduated in 1900 but struggled to find an academic position. He took Swiss citizenship and worked as a tutor before securing a job at the patent office in Bern. His years in Zurich shaped his independent way of thinking and his first serious scientific collaborations." },
+    { "year": 1902, "place": "Bern, Switzerland", "lat": 46.9480, "lng": 7.4474, "zoom": 13, "text": "Einstein takes a job at the Swiss Patent Office in Bern. He works there for seven years while developing his most revolutionary ideas.", "detail": "The patent office gave him a steady income and time to think. In 1905 he published four papers that would change physics: on the photoelectric effect (for which he later won the Nobel Prize), Brownian motion, special relativity, and the equivalence of mass and energy (E=mc²). This year is known as his annus mirabilis." },
+    { "year": 1905, "place": "Bern – Annus Mirabilis", "lat": 46.9480, "lng": 7.4474, "zoom": 13, "text": "From his desk at the patent office, Einstein publishes the special theory of relativity and the paper that introduces E=mc².", "detail": "He had no access to a university lab or a famous mentor. His work was purely theoretical and emerged from thought experiments and deep reflection. The papers were initially met with skepticism but gradually gained acceptance. They established him as a leading physicist and led to positions in Zurich and Prague." },
+    { "year": 1909, "place": "Zurich – Professor", "lat": 47.3769, "lng": 8.5417, "zoom": 13, "text": "Einstein becomes a professor at the University of Zurich, then at the German University in Prague, and returns to ETH Zurich.", "detail": "His academic career took him to Prague and back to Zurich. He continued to develop the ideas that would lead to general relativity — the theory of gravity as the curvature of spacetime. In 1913 he accepted a position in Berlin, where he would complete that work." },
+    { "year": 1914, "place": "Berlin, Germany", "lat": 52.5200, "lng": 13.4050, "zoom": 11, "text": "Einstein moves to Berlin to join the Prussian Academy of Sciences. He separates from Mileva and completes the general theory of relativity.", "detail": "Berlin was the center of German physics. Einstein finished the general theory in 1915; it was confirmed in 1919 when British astronomers observed the bending of starlight during an eclipse. Overnight he became a global celebrity. He would remain in Berlin until the rise of the Nazis forced him to leave." },
+    { "year": 1921, "place": "Stockholm – Nobel Prize", "lat": 59.3293, "lng": 18.0686, "zoom": 11, "text": "Einstein is awarded the Nobel Prize in Physics for 1921, specifically for the photoelectric effect, not relativity.", "detail": "The Nobel committee cited his explanation of the photoelectric effect, which had helped establish quantum theory. Relativity was still considered too controversial by some. Einstein used the prize money to support his first wife and their sons. He traveled widely in the 1920s, giving lectures and meeting world leaders." },
+    { "year": 1933, "place": "Princeton, USA", "lat": 40.3573, "lng": -74.6672, "zoom": 12, "text": "Einstein flees Nazi Germany and accepts a position at the Institute for Advanced Study in Princeton. He never returns to Europe.", "detail": "With Hitler's rise, Einstein's property was confiscated and his books burned. He was in the United States when he decided not to go back. Princeton became his home for the rest of his life. He worked on unified field theory, supported refugee scientists, and spoke out against fascism and for civil rights." },
+    { "year": 1940, "place": "Princeton – US Citizen", "lat": 40.3573, "lng": -74.6672, "zoom": 12, "text": "Einstein becomes a US citizen. He continues to work at the Institute and writes the letter that helps spur the Manhattan Project.", "detail": "He had signed a letter to President Roosevelt warning that Nazi Germany might develop nuclear weapons. After the war he campaigned for nuclear disarmament and world government. His house at 112 Mercer Street in Princeton is now a museum. He remained active in science and public life until his death." },
+    { "year": 1955, "place": "Princeton", "lat": 40.3573, "lng": -74.6672, "zoom": 12, "text": "Albert Einstein dies in Princeton on 18 April 1955. His body was cremated and his ashes scattered; his brain was preserved for study.", "detail": "He had refused surgery for an aortic aneurysm, saying he had done his share and it was time to go. His legacy — the theories of relativity, his contributions to quantum physics, and his moral voice — has made him one of the most recognized figures in history. The map of his life, from Ulm to Princeton, is the geography of modern physics." }
+  ]
+}

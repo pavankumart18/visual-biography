@@ -1,0 +1,18 @@
+{
+  "title": "Geographic Story Builder",
+  "subtitle": "Create and view interactive map-based biographies.",
+  "narrative": "This app lets you explore pre-made geographic biographies (map + timeline + story cards) or generate your own. Enter a famous person's name or a short story outline below; an AI will produce a biography in the same format (locations, years, and narrative). You can then view it on the map and save the story as a JSON file.",
+  "cards": [
+    {"icon": "bi bi-geo-alt", "title": "Gandhi", "body": "Explore the journey of Mahatma Gandhi across India, South Africa, and Britain.", "storyId": "gandhi"},
+    {"icon": "bi bi-rocket-takeoff", "title": "Elon Musk", "body": "From South Africa to Silicon Valley, Texas, and space.", "storyId": "elon-musk"},
+    {"icon": "bi bi-lightbulb", "title": "Swami Vivekananda", "body": "From Kolkata to Chicago and the Parliament of Religions.", "storyId": "swami-vivekananda"},
+    {"icon": "bi bi-stars", "title": "Albert Einstein", "body": "Ulm, Zurich, Bern, Berlin, and Princeton.", "storyId": "albert-einstein"},
+    {"icon": "bi bi-heart", "title": "Nelson Mandela", "body": "From Qunu to Robben Island and the Union Buildings.", "storyId": "nelson-mandela"},
+    {"icon": "bi bi-heart-pulse", "title": "Mother Teresa", "body": "From Skopje to Kolkata and the world.", "storyId": "mother-teresa"}
+  ],
+  "defaults": {"model": "gpt-4o-mini"},
+  "supabase": {
+    "url": "https://cjjvgiczswsiqhcvapjp.supabase.co",
+    "key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNqanZnaWN6c3dzaXFoY3ZhcGpwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUzODA3MTIsImV4cCI6MjA4MDk1NjcxMn0.CRQMGRp0QzMQ4uq2ZduWItYVZqjcvIv4AWPTiBfaY-k"
+  }
+}

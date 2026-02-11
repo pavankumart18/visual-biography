@@ -1,0 +1,74 @@
+{
+  "meta": {
+    "title": "Gandhi – A Geographic Biography | The Story"
+  },
+  "header": {
+    "logo": "The Geographic Story"
+  },
+  "hero": {
+    "label": "A Visual Biography",
+    "title": "The Journey of Gandhi",
+    "subtitle": "Tracing the footsteps of Mahatma Gandhi across three continents — from a small coastal town in India to the world stage of freedom.",
+    "author": "Visual Stories Team",
+    "date": "February 2026"
+  },
+  "articleIntro": {
+    "lead": "Mohandas Karamchand Gandhi was not just a leader — he was a journey. His life took him across oceans and continents, each place shaping the philosophy that would eventually free a nation.",
+    "dropCap": "Born in 1869 in Porbandar, a small coastal town on the western edge of India, Gandhi's early life gave little indication of the revolutionary he would become. Yet it was his travels across three continents that transformed a shy lawyer into the Father of a Nation.",
+    "dropCapHighlight": "travels across three continents",
+    "paragraph": "This story traces those movements — not just as dots on a map, but as turning points in history. Each location represents a chapter in Gandhi's evolution: from student to activist, from lawyer to leader, from individual to icon."
+  },
+  "dataSection": {
+    "title": "The Numbers Behind the Journey",
+    "cards": [
+      { "value": "79", "label": "Years of Life" },
+      { "value": "15", "label": "Key Locations" },
+      { "value": "3", "label": "Continents" },
+      { "value": "21", "label": "Years Abroad" }
+    ]
+  },
+  "mapSection": {
+    "intro": "Scroll the story panel to follow Gandhi's journey. The map updates as you move through the text."
+  },
+  "articleReturn": {
+    "title": "The Return Home",
+    "paragraphs": [
+      "After 21 years abroad, Gandhi returned to India in 1915 a transformed man. The shy lawyer who had left was now a seasoned activist, armed with a philosophy of non-violent resistance that would shake an empire.",
+      "His strategy was deliberate. He began not in the centers of power, but at the margins — with indigo farmers in Champaran, with textile workers in Ahmedabad. He built from the ground up, understanding that true freedom had to include everyone."
+    ]
+  },
+  "timeline": {
+    "title": "Key Milestones",
+    "items": [
+      { "year": "1869", "event": "Born in Porbandar, Gujarat" },
+      { "year": "1893", "event": "Experiences racism in South Africa — begins activism" },
+      { "year": "1915", "event": "Returns to India after 21 years" },
+      { "year": "1930", "event": "Leads the Salt March — a turning point" },
+      { "year": "1947", "event": "India gains independence" },
+      { "year": "1948", "event": "Assassinated while advocating for peace" }
+    ]
+  },
+  "footer": {
+    "lines": [
+      "A scrollytelling experience exploring the geographic journey of Mahatma Gandhi.",
+      "Data sourced from historical records • Built with Leaflet.js"
+    ]
+  },
+  "storyData": [
+    { "year": 1869, "place": "Porbandar, Gujarat", "lat": 21.6417, "lng": 69.6293, "zoom": 11, "text": "Mohandas Karamchand Gandhi is born into a merchant family in this small coastal town on the Arabian Sea, in the then princely state of Porbandar.", "detail": "His mother Putlibai was deeply religious and practised fasting and devotion; his father Karamchand served as diwan (chief minister). The town's harbour and trading culture exposed the young Gandhi to diverse people and ideas. The values of simplicity, truthfulness, and service that he absorbed here would define his entire life and philosophy." },
+    { "year": 1888, "place": "London, England", "lat": 51.5072, "lng": -0.1276, "zoom": 10, "text": "Gandhi sails to London to study law at the Inner Temple, leaving his wife Kasturba and infant son behind. He is exposed to Western political thought and the city's intellectual life.", "detail": "He qualified as a barrister in 1891. During his stay he read the Bhagavad Gita in translation, explored vegetarianism and the Theosophical Society, and encountered writers who would later influence his ideas — including Thoreau on civil disobedience. His time in London shaped both his legal mind and his growing interest in moral and political resistance." },
+    { "year": 1893, "place": "Durban, South Africa", "lat": -29.8587, "lng": 31.0218, "zoom": 10, "text": "Arriving to work on a legal case, Gandhi is thrown off a first-class train compartment at Pietermaritzburg despite holding a valid ticket — a turning point that commits him to fighting racial injustice.", "detail": "The incident left a lasting mark. He chose to remain in South Africa to organise the Indian community against the colony's discriminatory laws. In Durban he built his legal practice, led campaigns against poll taxes and registration acts, and began developing the techniques of mass nonviolent resistance that would later define the Indian freedom struggle." },
+    { "year": 1906, "place": "Johannesburg, South Africa", "lat": -26.2041, "lng": 28.0473, "zoom": 11, "text": "In Johannesburg, Gandhi launches the first Satyagraha campaign against the Asiatic Registration Act (the 'Black Act'), which required Indians to carry passes and submit to fingerprinting.", "detail": "He coined the term 'Satyagraha' — holding to truth — to describe his method of nonviolent resistance. Mass meetings, strikes, and voluntary imprisonment followed. The campaign continued for years and drew international attention. Here Gandhi refined the discipline, organisation, and moral framework that would later mobilise millions in India." },
+    { "year": 1913, "place": "Tolstoy Farm, South Africa", "lat": -26.2333, "lng": 28.3833, "zoom": 12, "text": "Gandhi establishes Tolstoy Farm near Johannesburg — a communal settlement where satyagrahis and their families live by manual labour, self-sufficiency, and simple living.", "detail": "Named after Leo Tolstoy, with whom Gandhi corresponded, the farm housed dozens of residents who grew food, made sandals, and ran a school. It was a laboratory for his ideas on communal life, equality across religions and castes, and the dignity of manual work. The model would inspire the ashrams he later founded in India, including Sabarmati." },
+    { "year": 1915, "place": "Mumbai, India", "lat": 19.0760, "lng": 72.8777, "zoom": 11, "text": "Gandhi returns to India via Bombay (Mumbai) after 21 years in South Africa. He is welcomed by political leaders and the public, but deliberately avoids rushing into national politics.", "detail": "At the insistence of Gopal Krishna Gokhale, he spent the following year travelling by train and third class to understand the country — its villages, languages, and problems. He founded the Sabarmati Ashram in Ahmedabad and began building the organisational and moral base from which he would later launch India-wide movements." },
+    { "year": 1917, "place": "Champaran, Bihar", "lat": 26.8500, "lng": 84.9200, "zoom": 10, "text": "Gandhi leads his first major satyagraha in India in the Champaran district of Bihar, defending indigo farmers forced into unfair contracts and exploitative conditions by British planters.", "detail": "He arrived at the request of local peasants, defied an order to leave, and faced possible arrest. Thousands of farmers gave testimony; the authorities eventually set up an inquiry and agreed to reforms. The Champaran campaign proved that nonviolent mass action could extract concessions from the colonial state and established Gandhi as a leader with a method that worked on Indian soil." },
+    { "year": 1918, "place": "Ahmedabad, Gujarat", "lat": 23.0225, "lng": 72.5714, "zoom": 11, "text": "In Ahmedabad, Gandhi supports textile workers in a dispute with mill owners. He uses a personal fast for the first time as a tool of moral pressure, and the conflict is resolved through arbitration.", "detail": "The workers demanded a 35% wage increase; the mill owners refused. Gandhi fasted until both sides agreed to arbitration, and a settlement was reached. The episode demonstrated the power of the fast as a political and moral instrument and strengthened the credibility of nonviolent resistance in the eyes of both the public and the British." },
+    { "year": 1920, "place": "Nagpur, Maharashtra", "lat": 21.1458, "lng": 79.0882, "zoom": 11, "text": "At the Nagpur session of the Indian National Congress, Gandhi wins support for the Non-Cooperation Movement — a nationwide campaign of boycotting British institutions, titles, and goods.", "detail": "The programme called on Indians to withdraw from government schools, courts, and councils, and to spin and wear khadi (homespun cloth) instead of British textiles. Millions responded; the movement spread across the country and brought Gandhi to the centre of the Congress. Non-cooperation continued until early 1922, when Gandhi suspended it after violence in Chauri Chaura." },
+    { "year": 1922, "place": "Sabarmati Ashram, Ahmedabad", "lat": 23.0600, "lng": 72.5800, "zoom": 12, "text": "From the Sabarmati Ashram on the banks of the Sabarmati River, Gandhi runs the independence movement, spins khadi daily, and hosts a stream of visitors and freedom fighters.", "detail": "He had moved the ashram here in 1917. Residents followed a strict routine of prayer, manual labour, and simplicity; caste and religious barriers were challenged. The ashram became the symbolic and organisational heart of the struggle. In March 1930, Gandhi would set out from here on the Salt March to Dandi." },
+    { "year": 1930, "place": "Dandi, Gujarat", "lat": 20.7179, "lng": 72.8552, "zoom": 12, "text": "Gandhi completes the Salt March — a 24-day, 240-mile walk from Sabarmati to the village of Dandi on the coast — and breaks the British salt law by picking up natural salt from the sea.", "detail": "The march began on 12 March with a handful of followers and grew into a procession of thousands. On 6 April, Gandhi waded into the sea and collected salt in defiance of the government monopoly. The act triggered mass civil disobedience across India: people made and sold salt, boycotted British goods, and faced arrests. The Salt Satyagraha became one of the most iconic moments of the freedom struggle and drew worldwide attention." },
+    { "year": 1931, "place": "London, England", "lat": 51.5072, "lng": -0.1276, "zoom": 10, "text": "Gandhi travels to London as the sole representative of the Indian National Congress at the Second Round Table Conference, seeking dominion status or independence for India.", "detail": "He met with British leaders, spoke to the press, and addressed public meetings. He stayed in the East End and met factory workers and the poor. The conference did not produce a settlement — the British were unwilling to concede full self-rule — but Gandhi's presence and his insistence on Indian unity and independence were widely reported and strengthened the moral case for freedom." },
+    { "year": 1942, "place": "Mumbai, India", "lat": 19.0760, "lng": 72.8777, "zoom": 11, "text": "At the All India Congress Committee meeting in Bombay (Mumbai), Gandhi launches the Quit India Movement, demanding immediate British withdrawal from India.", "detail": "His speech included the famous call 'Do or die' — Indians were to resist British rule nonviolently but firmly. Within days, the British arrested Gandhi and other leaders; the movement continued without them, with strikes, demonstrations, and repression. Quit India kept the demand for independence alive through the Second World War and intensified pressure on the colonial government." },
+    { "year": 1947, "place": "New Delhi, India", "lat": 28.6139, "lng": 77.2090, "zoom": 11, "text": "India gains independence on 15 August 1947. Gandhi is in Delhi, fasting and working to stop Hindu–Muslim violence during Partition.", "detail": "He did not attend the celebrations in the capital. As the subcontinent was divided into India and Pakistan, millions were displaced and communal violence flared. Gandhi walked through riot-affected areas, held prayer meetings, and fasted to appeal for peace. His presence in Delhi in the months after Independence was a moral force for calm in one of the most violent periods in the region's history." },
+    { "year": 1948, "place": "Birla House, New Delhi", "lat": 28.6139, "lng": 77.2090, "zoom": 13, "text": "On 30 January 1948, Gandhi is shot at Birla House (now Gandhi Smriti) during his evening prayer meeting. He dies minutes later, still advocating unity and nonviolence.", "detail": "The assassin was Nathuram Godse, a Hindu nationalist who opposed Gandhi's outreach to Muslims and his support for payment to Pakistan. Gandhi's last words are said to have been 'Hey Ram' (O God). His death shocked India and the world. His funeral procession in Delhi drew millions; his legacy of satyagraha, truth, and nonviolence continues to inspire movements for justice and freedom everywhere." }
+  ]
+}

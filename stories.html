@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&family=Comic+Neue:wght@400;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-primary: #faf9f6;
+            --bg-dark: #1a1a1a;
+            --text-primary: #121212;
+            --text-secondary: #666666;
+            --accent: #c41e3a;
+            --border: #e0e0e0;
+            --comic-yellow: #fff9c4;
+            --comic-border: #333;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Source Sans Pro', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 18px;
+            line-height: 1.7;
+        }
+
+        /* ===== HEADER ===== */
+        .site-header {
+            border-bottom: 1px solid var(--border);
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            z-index: 1000;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .site-header .back-link {
+            flex-shrink: 0;
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .site-header .back-link:hover {
+            color: var(--accent);
+        }
+
+        .site-header .logo {
+            flex: 1;
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        .site-header .header-actions {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .site-header .header-actions a,
+        .site-header .header-actions button {
+            font-size: 13px;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: inherit;
+        }
+
+        .site-header .header-actions a:hover,
+        .site-header .header-actions button:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        /* ===== HERO ===== */
+        .hero {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 30px;
+            text-align: center;
+        }
+
+        .hero-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 25px;
+        }
+
+        .hero .subtitle {
+            font-size: 22px;
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .hero .byline {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .hero .byline span {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* ===== ARTICLE CONTENT ===== */
+        .article-content {
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 30px;
+        }
+
+        .article-content p {
+            margin-bottom: 25px;
+        }
+
+        .article-content p.lead {
+            font-size: 22px;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .article-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            margin: 60px 0 25px;
+        }
+
+        .drop-cap::first-letter {
+            font-family: 'Playfair Display', serif;
+            font-size: 72px;
+            float: left;
+            line-height: 0.8;
+            margin: 5px 12px 0 0;
+            color: var(--accent);
+        }
+
+        .highlight-text {
+            background: linear-gradient(180deg, transparent 60%, rgba(196, 30, 58, 0.2) 60%);
+            padding: 0 3px;
+        }
+
+        /* ===== DATA CARDS ===== */
+        .data-section {
+            background: var(--bg-dark);
+            color: white;
+            padding: 60px 30px;
+            margin: 60px 0;
+        }
+
+        .data-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .data-cards {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .data-card {
+            text-align: center;
+        }
+
+        .data-card .value {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .data-card .label {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #aaa;
+            margin-top: 8px;
+        }
+
+        /* ===== MAP (left) + CARDS (right) — ONE PAGE SCROLL ===== */
+        .map-story-section {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        .map-section {
+            position: sticky;
+            top: 0;
+            left: 0;
+            flex: 1;
+            min-width: 0;
+            height: 100vh;
+            z-index: 0;
+        }
+
+        .map-section .section-intro {
+            position: absolute;
+            top: 16px;
+            left: 20px;
+            right: 20px;
+            text-align: center;
+            color: var(--text-primary);
+            z-index: 1000;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Cards on the right — in main flow, one scroll for whole page */
+        .story-steps-wrapper {
+            width: 420px;
+            min-width: 360px;
+            flex-shrink: 0;
+            background: var(--bg-primary);
+            border-left: 1px solid var(--border);
+        }
+
+        .story-step {
+            padding: 28px 24px;
+            margin-bottom: 50vh;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .story-step:hover {
+            background: rgba(255, 249, 196, 0.3);
+        }
+
+        .story-step.active {
+            background: var(--comic-yellow);
+            border-left: 4px solid var(--accent);
+        }
+
+        .story-step-inner {
+            text-align: left;
+        }
+
+        .story-step .year {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .story-step .place {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            line-height: 1.25;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+
+        .story-step .text {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .story-step .detail {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 12px;
+            line-height: 1.55;
+            opacity: 0.9;
+        }
+
+        .story-steps-wrapper::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .story-steps-wrapper::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 3px;
+        }
+
+        /* ===== COMIC STYLE MAP POPUP ===== */
+        .leaflet-popup-content-wrapper {
+            background: var(--comic-yellow);
+            border: 3px solid var(--comic-border);
+            border-radius: 15px;
+            box-shadow: 4px 4px 0 var(--comic-border);
+            font-family: 'Comic Neue', cursive;
+        }
+
+        .leaflet-popup-tip-container {
+            display: none;
+        }
+
+        .leaflet-popup-content {
+            margin: 15px 18px;
+            font-size: 14px;
+        }
+
+        .popup-content .popup-year {
+            font-family: 'Comic Neue', cursive;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+            display: inline-block;
+            background: white;
+            padding: 2px 10px;
+            border-radius: 8px;
+            border: 2px solid var(--comic-border);
+        }
+
+        .popup-content .popup-place {
+            font-family: 'Comic Neue', cursive;
+            font-size: 16px;
+            font-weight: 700;
+            margin: 8px 0 5px;
+        }
+
+        .popup-content .popup-text {
+            font-family: 'Comic Neue', cursive;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .leaflet-control-zoom {
+            display: none;
+        }
+
+        /* ===== TIMELINE SECTION ===== */
+        .timeline-section {
+            max-width: 800px;
+            margin: 80px auto;
+            padding: 0 30px;
+        }
+
+        .timeline-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            border-left: 2px solid var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 40px;
+            padding-left: 25px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -36px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .timeline-item .year {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .timeline-item .event {
+            font-size: 16px;
+            margin-top: 5px;
+        }
+
+        /* ===== FOOTER ===== */
+        .site-footer {
+            background: var(--bg-dark);
+            color: white;
+            text-align: center;
+            padding: 50px 30px;
+            margin-top: 80px;
+        }
+
+        .site-footer p {
+            font-size: 14px;
+            color: #aaa;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <header class="site-header">
+        <a href="index.html" class="back-link" aria-label="Back to home">← Back</a>
+        <div class="logo" id="headerLogo"></div>
+        <div class="header-actions" id="headerActions" style="display: none;"></div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-label" id="heroLabel"></div>
+        <h1 id="heroTitle"></h1>
+        <p class="subtitle" id="heroSubtitle"></p>
+        <p class="byline" id="heroByline"></p>
+    </section>
+
+    <!-- INTRO CONTENT -->
+    <article class="article-content">
+        <p class="lead" id="introLead"></p>
+        <p class="drop-cap" id="introDropCap"></p>
+        <p id="introParagraph"></p>
+    </article>
+
+    <!-- DATA SECTION -->
+    <section class="data-section">
+        <h2 id="dataSectionTitle"></h2>
+        <div class="data-cards" id="dataCards"></div>
+    </section>
+
+    <!-- MAP + STORY SIDE BY SIDE -->
+    <div class="map-story-section">
+        <section class="map-section" id="mapSection">
+            <p class="section-intro" id="mapSectionIntro"></p>
+            <div id="map"></div>
+        </section>
+        <div class="story-steps-wrapper" id="storyStepsWrapper">
+            <!-- Steps injected by script.js from config.json -->
+        </div>
+    </div>
+
+    <!-- MORE CONTENT -->
+    <article class="article-content">
+        <h2 id="returnTitle"></h2>
+        <div id="returnParagraphs"></div>
+    </article>
+
+    <!-- TIMELINE -->
+    <section class="timeline-section">
+        <h2 id="timelineTitle"></h2>
+        <div class="timeline" id="timelineList"></div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="site-footer" id="footerContent"></footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
