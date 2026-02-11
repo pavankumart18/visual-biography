@@ -1,42 +1,81 @@
-# Gandhi: A Geographic Biography 🗺️
+# Geographic Story Builder 🗺️
 
-An interactive scrollytelling map exploring the life and journey of Mahatma Gandhi across three continents. Designed in a **New York Times-style editorial layout** with **comic-style interactive elements**.
+Create and explore interactive map-based biographies. Generate geographic stories with AI, view them in a scrollytelling map, and save your stories (with optional sign-in).
 
 ## ✨ Features
 
-- **NYT-Style Editorial Layout**: A professional, long-form article structure with drop caps, elegant typography (Playfair Display), and editorial flow.
-- **Interactive Scrollytelling**: A "chart that happens to be a map" embedded in the middle of the story. Scrolling through the story panel on the right dynamically pans and zooms the map on the left.
-- **Comic-Style Visuals**: Interactive map popups and active story cards feature a playful comic aesthetic (Comic Neue font, yellow highlights, thick borders, and shadows).
-- **Data-Driven Storytelling**: A dedicated section highlighting key statistics (years documented, locations, distance traveled).
-- **Smooth Map Transitions**: Uses Leaflet.js `flyTo` for cinematic movement between historical locations.
-- **Responsive Design**: Adapts for a premium reading experience on desktop.
+- **Explore stories** – Pre-made biographies (Gandhi, Einstein, Nelson Mandela, and more) with map, timeline, and narrative.
+- **Generate your own** – Enter a person’s name or story outline; an AI produces a geographic biography in the same format.
+- **Scrollytelling map** – Scroll through the story while the map pans and zooms to each location (Leaflet.js).
+- **Save stories** – Sign in with Google to save stories to your account (Supabase). Unsaved drafts appear on the home page so you can save them later.
+- **Editorial layout** – Drop caps, Playfair Display typography, and comic-style map popups.
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-You only need a web browser. The project uses standard web technologies (HTML/CSS/JS) and loads Leaflet.js via CDN.
 
-### How to Run
-1. Clone the repository or download the files.
-2. Open `index.html` in any modern web browser.
-3. For the best experience (to avoid local file security restrictions), run a simple local server:
+- A modern web browser
+- (Optional) Node or Python for a local server
+- (Optional) OpenAI-compatible API key for story generation
+- (Optional) Supabase project for saving stories
 
-```bash
-# Using Python
-python -m http.server 8080
-```
-Then visit `http://localhost:8080` in your browser.
+### Run locally
 
-## 📊 Data
-The story data is managed within `index.html` but is based on the `data.csv` file included in the repository, covering 13 pivotal moments from 1869 (Porbandar) to 1948 (New Delhi).
+1. Clone or download the repo.
+2. Serve the folder (recommended, to avoid CORS):
 
-## 🛠️ Built With
-- **Leaflet.js**: For interactive mapping.
-- **CartoDB Voyager**: For the clean, illustrated map tiles.
-- **Google Fonts**:
-  - *Playfair Display* (Editorial titles)
-  - *Source Sans Pro* (Body text)
-  - *Comic Neue* (Interactive elements)
+   ```bash
+   python -m http.server 8080
+   ```
 
-## 📝 Author
-Created as a conceptual prototype for a geographic biography.
+3. Open **http://localhost:8080** in your browser.
+
+### Generate a story
+
+1. On the home page, enter a name or short outline (e.g. *Marie Curie, physicist*) and click **Generate story**.
+2. Configure the LLM if prompted (navbar → magic wand): set API base URL and key (e.g. OpenAI or OpenRouter).
+3. After generation, you’re taken to the story view. Use **Save** to store it (requires sign-in).
+
+### Save stories (Supabase)
+
+1. **Configure Supabase** (one-time):
+   - Create a project at [supabase.com](https://supabase.com).
+   - In **Authentication → Providers**, enable **Google**.
+   - In **Authentication → URL Configuration**, add your redirect URL (e.g. `http://localhost:8080/index.html`).
+   - In **SQL Editor**, run the script in `supabase-stories-table.sql` to create the `stories` table and RLS.
+
+2. **Add credentials** in `index-config.json`:
+
+   ```json
+   "supabase": {
+     "url": "https://YOUR_PROJECT.supabase.co",
+     "key": "YOUR_ANON_KEY"
+   }
+   ```
+
+3. On the site, click **Log in** and sign in with Google. After that, **Save** on a story will store it under **Your generated stories**.
+
+## 📁 Project structure
+
+| Path | Description |
+|------|-------------|
+| `index.html` | Home: explore stories, your saved/draft stories, generate form |
+| `index.js` | Home logic: config, cards, auth UI, saved/draft list, LLM generation |
+| `stories.html` | Story view: scrollytelling map and narrative |
+| `script.js` | Story view logic: load config, map, save to Supabase |
+| `storage.js` | Supabase client: auth, list/save/get stories |
+| `index-config.json` | App config: title, cards, defaults, Supabase url/key |
+| `configs/*.json` | Pre-made story configs (Gandhi, Einstein, etc.) |
+| `supabase-stories-table.sql` | SQL to create `public.stories` table and RLS |
+
+## 🛠️ Built with
+
+- **Leaflet.js** – Maps
+- **Bootstrap 5** – Layout and UI
+- **bootstrap-llm-provider** – LLM API configuration
+- **Supabase** – Auth (Google) and storage for saved stories
+- **Google Fonts** – Playfair Display, Source Sans Pro, Comic Neue
+
+## 📝 License
+
+Conceptual prototype for geographic biographies.
