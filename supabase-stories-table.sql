@@ -21,3 +21,4 @@ create policy "Users manage own stories"
 
 -- Optional: index for listing by user and date
 create index if not exists stories_user_updated_idx on public.stories (user_id, updated_at desc);
+

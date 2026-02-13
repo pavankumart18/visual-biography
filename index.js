@@ -5,11 +5,19 @@
 
 import { openaiConfig } from "https://cdn.jsdelivr.net/npm/bootstrap-llm-provider@1.4.0/+esm";
 import { parse } from "https://cdn.jsdelivr.net/npm/partial-json@0.1.7/+esm";
-import { Storage } from "./storage.js";
 
 const $ = (sel, el = document) => el.querySelector(sel);
 const STORAGE_KEY = "storyTellingGeneratedConfig";
-const SAVED_STORIES_KEY = "storyTellingSavedStories";
+
+/** Encode story config for URL hash (compressed). */
+function encodeStoryForUrl(config) {
+  if (typeof globalThis.LZString === "undefined") return null;
+  try {
+    return globalThis.LZString.compressToEncodedURIComponent(JSON.stringify(config));
+  } catch {
+    return null;
+  }
+}
 
 /** Show a popup notification in the top-right. type: "success" | "warning" | "danger" */
 function showNotification(message, type = "warning") {
@@ -128,16 +136,6 @@ cardsContainer.innerHTML = (indexConfig.cards || []).map(
   </div>`
 ).join("");
 
-// Local (non-auth) saved stories
-function getLocalSavedStories() {
-  try {
-    const raw = localStorage.getItem(SAVED_STORIES_KEY);
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
-}
-
 function getDraftConfig() {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -147,163 +145,33 @@ function getDraftConfig() {
   }
 }
 
-function renderAuth(container) {
-  if (!container) return;
-  const session = Storage.getSession();
-  const supabaseConfigured = Storage.isConfigured?.() || !!session || !!(localStorage.getItem("supabase_url") && localStorage.getItem("supabase_key"));
-  let html = "";
-  if (!session) {
-    html = '<button type="button" class="btn btn-outline-light nav-btn" id="auth-login">Log in</button>';
-  } else {
-    const email = (session.user && session.user.email) || "Signed in";
-    html = `<span class="text-light me-2 small d-none d-md-inline">${email}</span><button type="button" class="btn btn-outline-light nav-btn" id="auth-signout">Sign out</button>`;
-  }
-  container.innerHTML = html;
-  $("#auth-login")?.addEventListener("click", async () => {
-    if (!supabaseConfigured) await configureSupabase();
-    else doGoogleLogin();
-  });
-  $("#auth-signout")?.addEventListener("click", () => Storage.logout().then(() => { renderAuth(container); renderSavedStories(); }));
-}
-
-function doGoogleLogin() {
-  Storage.login().catch((e) => showNotification(e.message || "Login failed", "danger"));
-}
-
-async function configureSupabase() {
-  const choice = confirm(
-    "To configure Supabase permanently, add supabase.url and supabase.key to index-config.json.\n\nClick OK to reload from config; Cancel to enter URL and key for this session."
-  );
-  if (choice) {
-    try {
-      const cfg = await fetch("index-config.json").then((r) => r.json());
-      const url = cfg.supabase?.url;
-      const key = cfg.supabase?.key;
-      if (url && key) {
-        const ok = await Storage.init(url, key);
-        renderAuth($("#auth-controls"));
-        if (ok) await renderSavedStories();
-        showNotification(ok ? "Supabase connected." : "Connection failed.", ok ? "success" : "danger");
-      } else {
-        showNotification("Add supabase.url and supabase.key to index-config.json.", "warning");
-      }
-    } catch (e) {
-      showNotification("Error loading config: " + e.message, "danger");
-    }
-  } else {
-    const url = prompt("Supabase project URL (e.g. https://xxxx.supabase.co):");
-    const key = prompt("Supabase anon/public key:");
-    if (url && key) {
-      localStorage.setItem("supabase_url", url);
-      localStorage.setItem("supabase_key", key);
-      const ok = await Storage.init(url, key);
-      renderAuth($("#auth-controls"));
-      if (ok) await renderSavedStories();
-      showNotification(ok ? "Connected." : "Connection failed.", ok ? "success" : "danger");
-    }
-  }
-}
-
-async function renderSavedStories() {
+function renderSavedStories() {
   const container = $("#saved-stories");
   if (!container) return;
-  const session = Storage.getSession();
   const draft = getDraftConfig();
-  let savedList = [];
-  if (session) {
-    try {
-      savedList = await Storage.listStories();
-    } catch (e) {
-      savedList = getLocalSavedStories();
-    }
-  } else {
-    savedList = getLocalSavedStories();
-  }
-  const cards = [];
   if (draft) {
     const title = (draft.meta && draft.meta.title) ? draft.meta.title.replace(/\s*\|\s*The Story.*$/i, "").trim() : "Untitled story";
-    const canSave = !!session;
-    cards.push(`
-    <div class="col-md-4 col-lg-3">
-      <div class="card demo-card h-100 text-center">
-        <div class="card-body d-flex flex-column">
-          <div class="mb-3"><i class="display-4 text-primary bi bi-file-earmark-plus"></i></div>
-          <h6 class="card-title h5 mb-2">${title}</h6>
-          <p class="card-text small text-muted">Unsaved draft</p>
-          <div class="mt-auto d-flex gap-2 justify-content-center flex-wrap">
-            <a href="stories.html?generated=1" class="btn btn-outline-primary btn-sm">View</a>
-            <button type="button" class="btn ${canSave ? "btn-primary" : "btn-outline-secondary"} btn-sm" data-draft-save>${canSave ? "Save" : "Sign in to save"}</button>
-          </div>
-        </div>
-      </div>
-    </div>`);
-  }
-  savedList.forEach((entry) => {
-    const href = entry.source === "supabase" ? `stories.html?saved=${encodeURIComponent(entry.id)}` : `stories.html?saved=${encodeURIComponent(entry.id)}`;
-    cards.push(`
+    const encoded = encodeStoryForUrl(draft);
+    const href = encoded ? `stories.html#story=${encoded}` : "stories.html?generated=1";
+    container.innerHTML = `
     <div class="col-md-4 col-lg-3">
       <a href="${href}" class="text-decoration-none text-dark">
         <div class="card demo-card h-100 text-center">
           <div class="card-body d-flex flex-column">
-            <div class="mb-3"><i class="display-4 text-primary bi bi-bookmark-star"></i></div>
-            <h6 class="card-title h5 mb-2">${entry.title || "Saved story"}</h6>
-            <p class="card-text small text-muted">Saved ${new Date(entry.savedAt).toLocaleDateString()}</p>
+            <div class="mb-3"><i class="display-4 text-primary bi bi-link-45deg"></i></div>
+            <h6 class="card-title h5 mb-2">${title}</h6>
+            <p class="card-text small text-muted">Share or bookmark the link to keep it</p>
             <span class="mt-auto btn btn-outline-primary btn-sm">View story</span>
           </div>
         </div>
       </a>
-    </div>`);
-  });
-  container.innerHTML = cards.length ? cards.join("") : '<p class="text-muted">No saved stories yet. Generate a story, then sign in and use <strong>Save</strong> to add it here.</p>';
-  container.querySelector("[data-draft-save]")?.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const session = Storage.getSession();
-    if (!session) {
-      if (!Storage.isConfigured?.()) await configureSupabase();
-      else doGoogleLogin();
-      return;
-    }
-    const config = getDraftConfig();
-    if (!config) return;
-    try {
-      const title = (config.meta && config.meta.title) ? config.meta.title.replace(/\s*\|\s*The Story.*$/i, "").trim() : "Untitled story";
-      await Storage.saveStory({ title, config });
-      sessionStorage.removeItem(STORAGE_KEY);
-      showNotification("Story saved.", "success");
-      await renderSavedStories();
-    } catch (err) {
-      showNotification(err.message || "Save failed.", "danger");
-    }
-  });
-}
-
-// Init Supabase and render auth + saved stories
-(async () => {
-  const cfg = await fetch("index-config.json").then((r) => r.json());
-  const url = cfg.supabase?.url || localStorage.getItem("supabase_url") || "";
-  const key = cfg.supabase?.key || localStorage.getItem("supabase_key") || "";
-  if (url && key) {
-    await Storage.init(url, key);
-    localStorage.setItem("supabase_url", url);
-    localStorage.setItem("supabase_key", key);
+    </div>`;
+  } else {
+    container.innerHTML = '<p class="text-muted">Generate a story below—the link will be shareable and you can bookmark it.</p>';
   }
-  renderAuth($("#auth-controls"));
-  await renderSavedStories();
-  window.addEventListener("auth-changed", () => {
-    renderAuth($("#auth-controls"));
-    renderSavedStories();
-  });
-})();
-
-// Show toast when redirected after save or when sent here to sign in to save
-const urlParams = new URLSearchParams(window.location.search);
-if (urlParams.get("saved") === "1") {
-  showNotification("Story saved. It appears under Your generated stories.", "success");
-  window.history.replaceState({}, "", "index.html");
-} else if (urlParams.get("save") === "1") {
-  showNotification("Sign in to save your story. Your draft is under Your generated stories.", "warning");
-  window.history.replaceState({}, "", "index.html");
 }
+
+renderSavedStories();
 
 // Configure LLM button
 $("#configure-llm").addEventListener("click", () => openaiConfig({ show: true }));
@@ -423,8 +291,10 @@ Reply with ONLY the JSON object.`;
     config = config ? normalizeStoryConfig(config) : null;
     if (config && config.storyData && config.storyData.length > 0) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+      const encoded = encodeStoryForUrl(config);
+      const target = encoded ? `stories.html#story=${encoded}` : "stories.html?generated=1";
       showNotification("Story generated! Opening…", "success");
-      setTimeout(() => { window.location.href = "stories.html?generated=1"; }, 600);
+      setTimeout(() => { window.location.href = target; }, 600);
       return;
     }
 
@@ -440,3 +310,4 @@ Reply with ONLY the JSON object.`;
     spinner.classList.add("d-none");
   }
 });
+

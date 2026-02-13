@@ -229,7 +229,33 @@
     }
 
     var STORAGE_KEY = 'storyTellingGeneratedConfig';
-    var SAVED_STORIES_KEY = 'storyTellingSavedStories';
+
+    function getConfigFromHash() {
+        var hash = window.location.hash || '';
+        var m = hash.match(/^#story=(.+)$/);
+        if (!m) return null;
+        try {
+            var decoded = null;
+            if (typeof LZString !== 'undefined' && LZString.decompressFromEncodedURIComponent) {
+                decoded = LZString.decompressFromEncodedURIComponent(m[1]);
+            }
+            if (!decoded) decoded = decodeURIComponent(m[1]);
+            if (!decoded) return null;
+            return JSON.parse(decoded);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function setStoryHash(config) {
+        try {
+            var encoded = typeof LZString !== 'undefined' && LZString.compressToEncodedURIComponent
+                ? LZString.compressToEncodedURIComponent(JSON.stringify(config))
+                : encodeURIComponent(JSON.stringify(config));
+            var url = window.location.pathname + (window.location.search || '') + '#story=' + encoded;
+            window.history.replaceState(null, '', url);
+        } catch (e) { /* ignore */ }
+    }
 
     function getStoryId() {
         var params = new URLSearchParams(window.location.search);
@@ -247,92 +273,29 @@
         return params.get('generated') === '1';
     }
 
-    function getSavedId() {
-        var params = new URLSearchParams(window.location.search);
-        return params.get('saved') || null;
-    }
-
-    function getSavedStories() {
-        try {
-            var raw = localStorage.getItem(SAVED_STORIES_KEY);
-            return raw ? JSON.parse(raw) : [];
-        } catch (e) {
-            return [];
-        }
-    }
-
-    function saveToSavedStories(config, existingId) {
-        var list = getSavedStories();
-        var title = (config.meta && config.meta.title) ? config.meta.title.replace(/\s*\|\s*The Story.*$/i, '').trim() : 'Untitled story';
-        var id = existingId || ('saved-' + Date.now());
-        var entry = { id: id, title: title, savedAt: Date.now(), config: config };
-        var idx = list.findIndex(function (e) { return e.id === id; });
-        if (idx >= 0) {
-            list[idx] = entry;
-        } else {
-            list.unshift(entry);
-        }
-        localStorage.setItem(SAVED_STORIES_KEY, JSON.stringify(list));
-        return id;
-    }
-
-    function showGeneratedActions() {
+    function showShareAction() {
         var actions = document.getElementById('headerActions');
-        if (actions) {
-            actions.style.display = 'flex';
-            actions.style.justifyContent = 'flex-end';
-            actions.innerHTML = '<button type="button" id="saveStoryBtn">Save</button>';
-            document.getElementById('saveStoryBtn').addEventListener('click', async function () {
-                if (!config) return;
-                var savedId = getSavedId();
-                var Storage = (await import('./storage.js')).Storage;
-                var url = localStorage.getItem('supabase_url');
-                var key = localStorage.getItem('supabase_key');
-                if (url && key) await Storage.init(url, key);
-                var session = Storage.getSession();
-                if (!session) {
-                    window.location.href = 'index.html?save=1';
-                    return;
-                }
-                try {
-                    var title = (config.meta && config.meta.title) ? config.meta.title.replace(/\s*\|\s*The Story.*$/i, '').trim() : 'Untitled story';
-                    await Storage.saveStory({ id: savedId || undefined, title: title, config: config });
-                    sessionStorage.setItem(STORAGE_KEY + 'Saved', '1');
-                    window.location.href = 'index.html?saved=1';
-                } catch (e) {
-                    alert('Save failed: ' + (e.message || e));
-                }
-            });
-        }
+        if (!actions || !config) return;
+        actions.style.display = 'flex';
+        actions.style.justifyContent = 'flex-end';
+        actions.innerHTML = '<button type="button" id="copyLinkBtn">Copy link</button>';
+        document.getElementById('copyLinkBtn').addEventListener('click', function () {
+            try {
+                navigator.clipboard.writeText(window.location.href);
+                var btn = document.getElementById('copyLinkBtn');
+                if (btn) { btn.textContent = 'Copied!'; setTimeout(function () { btn.textContent = 'Copy link'; }, 2000); }
+            } catch (e) {
+                alert('Copy failed. Bookmark this page or copy the URL from the address bar.');
+            }
+        });
     }
 
-    async function loadConfig() {
-        var savedId = getSavedId();
-        if (savedId) {
-            var list = getSavedStories();
-            var entry = list.find(function (e) { return e.id === savedId; });
-            if (entry && entry.config) {
-                config = entry.config;
-                run();
-                showGeneratedActions();
-                return;
-            }
-            try {
-                var Storage = (await import('./storage.js')).Storage;
-                var url = localStorage.getItem('supabase_url');
-                var key = localStorage.getItem('supabase_key');
-                if (url && key) {
-                    await Storage.init(url, key);
-                    var remote = await Storage.getStory(savedId);
-                    if (remote && remote.config) {
-                        config = remote.config;
-                        run();
-                        showGeneratedActions();
-                        return;
-                    }
-                }
-            } catch (e) { /* ignore */ }
-            document.body.insertAdjacentHTML('beforeend', '<p style="padding: 20px; color: #c41e3a;">Saved story not found. <a href="index.html">Back to home</a>.</p>');
+    function loadConfig() {
+        var fromHash = getConfigFromHash();
+        if (fromHash && fromHash.storyData && fromHash.storyData.length > 0) {
+            config = fromHash;
+            run();
+            showShareAction();
             return;
         }
 
@@ -342,7 +305,8 @@
                 if (stored) {
                     config = JSON.parse(stored);
                     run();
-                    showGeneratedActions();
+                    setStoryHash(config);
+                    showShareAction();
                     return;
                 }
             } catch (e) {
@@ -372,3 +336,4 @@
 
     loadConfig().catch(function (err) { console.error(err); });
 })();
+
