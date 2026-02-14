@@ -9,11 +9,29 @@ import { parse } from "https://cdn.jsdelivr.net/npm/partial-json@0.1.7/+esm";
 const $ = (sel, el = document) => el.querySelector(sel);
 const STORAGE_KEY = "storyTellingGeneratedConfig";
 
-/** Encode story config for URL hash (compressed). */
+/** Minify config to short keys for smaller URL. */
+function minifyStoryConfig(config) {
+  if (!config || !Array.isArray(config.storyData)) return null;
+  return {
+    T: config.meta?.title,
+    L: config.header?.logo,
+    Hl: config.hero?.label, Ht: config.hero?.title, Hs: config.hero?.subtitle, Ha: config.hero?.author, Hd: config.hero?.date,
+    Al: config.articleIntro?.lead, Ad: config.articleIntro?.dropCap, Ah: config.articleIntro?.dropCapHighlight, Ap: config.articleIntro?.paragraph,
+    Dt: config.dataSection?.title, Dc: config.dataSection?.cards,
+    Mi: config.mapSection?.intro,
+    Rt: config.articleReturn?.title, Rp: config.articleReturn?.paragraphs,
+    Ct: config.timeline?.title, Ci: config.timeline?.items,
+    Fl: config.footer?.lines,
+    S: config.storyData.map((item) => ({ y: item.year, p: item.place, a: item.lat, n: item.lng, z: item.zoom, x: item.text, D: item.detail })),
+  };
+}
+
+/** Encode story config for URL hash (minified + compressed). */
 function encodeStoryForUrl(config) {
   if (typeof globalThis.LZString === "undefined") return null;
   try {
-    return globalThis.LZString.compressToEncodedURIComponent(JSON.stringify(config));
+    const compact = minifyStoryConfig(config);
+    return compact ? globalThis.LZString.compressToEncodedURIComponent(JSON.stringify(compact)) : null;
   } catch {
     return null;
   }

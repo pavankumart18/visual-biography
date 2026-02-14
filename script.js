@@ -129,7 +129,74 @@
             attributionControl: false
         }).setView([first.lat, first.lng], first.zoom);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png').addTo(map);
+        var voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png');
+        var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
+        var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
+        var terrain = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17 });
+        var dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
+        var light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png');
+
+        var layerList = [
+            { name: 'Map', layer: voyager },
+            { name: 'Satellite', layer: satellite },
+            { name: 'Terrain', layer: terrain },
+            { name: 'Streets', layer: streets },
+            { name: 'Light', layer: light },
+            { name: 'Dark', layer: dark }
+        ];
+        voyager.addTo(map);
+        var currentLayer = voyager;
+        var currentName = 'Map';
+
+        var mapTypeWrap = document.createElement('div');
+        mapTypeWrap.className = 'map-type-control-wrap';
+        mapTypeWrap.innerHTML = '<div class="map-type-control">' +
+            '<button type="button" class="map-type-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Map type">' +
+            '<span class="map-type-label">Map</span><span class="map-type-chevron">▼</span>' +
+            '</button>' +
+            '<div class="map-type-menu" role="listbox" hidden>' +
+            layerList.map(function (item) {
+                return '<button type="button" class="map-type-option" role="option" data-name="' + escapeHtml(item.name) + '">' + escapeHtml(item.name) + '</button>';
+            }).join('') +
+            '</div></div>';
+        var mapContainer = document.getElementById('map');
+        if (mapContainer && mapContainer.parentNode) mapContainer.parentNode.appendChild(mapTypeWrap);
+
+        var mapTypeBtn = mapTypeWrap.querySelector('.map-type-btn');
+        var mapTypeLabel = mapTypeWrap.querySelector('.map-type-label');
+        var mapTypeMenu = mapTypeWrap.querySelector('.map-type-menu');
+        var mapTypeOptions = mapTypeWrap.querySelectorAll('.map-type-option');
+
+        mapTypeBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var isOpen = !mapTypeMenu.hidden;
+            mapTypeMenu.hidden = isOpen;
+            mapTypeBtn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+        });
+        document.addEventListener('click', function (e) {
+            if (!mapTypeMenu.hidden && !mapTypeWrap.contains(e.target)) {
+                mapTypeMenu.hidden = true;
+                mapTypeBtn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        mapTypeOptions.forEach(function (opt) {
+            opt.addEventListener('click', function () {
+                var name = this.getAttribute('data-name');
+                var item = layerList.find(function (i) { return i.name === name; });
+                if (!item) return;
+                map.removeLayer(currentLayer);
+                item.layer.addTo(map);
+                currentLayer = item.layer;
+                currentName = name;
+                mapTypeLabel.textContent = name;
+                mapTypeMenu.hidden = true;
+                mapTypeBtn.setAttribute('aria-expanded', 'false');
+                mapTypeOptions.forEach(function (o) { o.classList.remove('selected'); });
+                this.classList.add('selected');
+            });
+        });
+        mapTypeWrap.querySelector('.map-type-option[data-name="Map"]').classList.add('selected');
 
         var markers = storyData.map(function (s) {
             return L.circleMarker([s.lat, s.lng], {
@@ -145,12 +212,34 @@
         var activeIndex = -1;
         var currentPopup = null;
 
-        // Cards on the right — each step has full card content
+        function getWikimediaImageUrl(title, callback) {
+            if (!title || !title.trim()) { callback(null); return; }
+            var t = title.trim();
+            var simple = t.replace(/\s*\([^)]*\)\s*$/, '').trim() || t;
+            var apiUrl = 'https://en.wikipedia.org/w/api.php?origin=*&action=query&prop=pageimages&titles=' +
+                encodeURIComponent(simple) + '&pithumbsize=800&format=json';
+            fetch(apiUrl)
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    var pages = data.query && data.query.pages;
+                    if (!pages) { callback(null); return; }
+                    var pageId = Object.keys(pages)[0];
+                    if (pageId === '-1') { callback(null); return; }
+                    var thumb = pages[pageId] && pages[pageId].thumbnail && pages[pageId].thumbnail.source;
+                    callback(thumb || null);
+                })
+                .catch(function () { callback(null); });
+        }
+
+        // Cards on the right — each step has image + full card content
         storyData.forEach(function (step, index) {
+            var placeKeyword = (step.place && step.place.split(',')[0]) ? step.place.split(',')[0].trim() : '';
             var div = document.createElement('section');
             div.className = 'story-step';
             div.dataset.index = index;
+            div.dataset.placeKeyword = placeKeyword;
             div.innerHTML = '<div class="story-step-inner">' +
+                '<img class="step-image" alt="' + escapeHtml(step.place) + '" loading="lazy" data-step-index="' + index + '">' +
                 '<div class="year">' + step.year + '</div>' +
                 '<div class="place">' + escapeHtml(step.place) + '</div>' +
                 '<div class="text">' + escapeHtml(step.text) + '</div>' +
@@ -164,6 +253,19 @@
         });
 
         var steps = wrapper.querySelectorAll('.story-step');
+
+        var placeholderImg = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><rect fill="#e8e8e8" width="800" height="400"/><text fill="#999" x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="18">Image not available</text></svg>');
+
+        steps.forEach(function (stepEl, index) {
+            var placeKeyword = stepEl.dataset.placeKeyword || (storyData[index] && storyData[index].place);
+            if (placeKeyword && placeKeyword.split) placeKeyword = placeKeyword.split(',')[0].trim();
+            var img = stepEl.querySelector('.step-image');
+            if (!img) return;
+            if (!placeKeyword) { img.src = placeholderImg; return; }
+            getWikimediaImageUrl(placeKeyword, function (url) {
+                img.src = url || placeholderImg;
+            });
+        });
 
         function activateStep(index) {
             if (index < 0 || index >= storyData.length) return;
@@ -230,6 +332,24 @@
 
     var STORAGE_KEY = 'storyTellingGeneratedConfig';
 
+    function expandStoryConfig(compact) {
+        if (!compact || !compact.S || !Array.isArray(compact.S)) return null;
+        return {
+            meta: { title: compact.T || 'Story' },
+            header: { logo: compact.L || 'The Geographic Story' },
+            hero: { label: compact.Hl || '', title: compact.Ht || '', subtitle: compact.Hs || '', author: compact.Ha || '', date: compact.Hd || '' },
+            articleIntro: { lead: compact.Al || '', dropCap: compact.Ad || '', dropCapHighlight: compact.Ah || '', paragraph: compact.Ap || '' },
+            dataSection: { title: compact.Dt || '', cards: compact.Dc || [] },
+            mapSection: { intro: compact.Mi || '' },
+            articleReturn: { title: compact.Rt || '', paragraphs: compact.Rp || [] },
+            timeline: { title: compact.Ct || '', items: compact.Ci || [] },
+            footer: { lines: compact.Fl || [] },
+            storyData: compact.S.map(function (item) {
+                return { year: item.y, place: item.p || '', lat: item.a, lng: item.n, zoom: item.z, text: item.x || '', detail: item.D || '' };
+            })
+        };
+    }
+
     function getConfigFromHash() {
         var hash = window.location.hash || '';
         var m = hash.match(/^#story=(.+)$/);
@@ -241,17 +361,36 @@
             }
             if (!decoded) decoded = decodeURIComponent(m[1]);
             if (!decoded) return null;
-            return JSON.parse(decoded);
+            var parsed = JSON.parse(decoded);
+            if (parsed.S && Array.isArray(parsed.S)) return expandStoryConfig(parsed);
+            return parsed;
         } catch (e) {
             return null;
         }
     }
 
+    function minifyStoryConfig(config) {
+        if (!config || !config.storyData || !config.storyData.length) return null;
+        return {
+            T: config.meta && config.meta.title,
+            L: config.header && config.header.logo,
+            Hl: config.hero && config.hero.label, Ht: config.hero && config.hero.title, Hs: config.hero && config.hero.subtitle, Ha: config.hero && config.hero.author, Hd: config.hero && config.hero.date,
+            Al: config.articleIntro && config.articleIntro.lead, Ad: config.articleIntro && config.articleIntro.dropCap, Ah: config.articleIntro && config.articleIntro.dropCapHighlight, Ap: config.articleIntro && config.articleIntro.paragraph,
+            Dt: config.dataSection && config.dataSection.title, Dc: config.dataSection && config.dataSection.cards,
+            Mi: config.mapSection && config.mapSection.intro,
+            Rt: config.articleReturn && config.articleReturn.title, Rp: config.articleReturn && config.articleReturn.paragraphs,
+            Ct: config.timeline && config.timeline.title, Ci: config.timeline && config.timeline.items,
+            Fl: config.footer && config.footer.lines,
+            S: config.storyData.map(function (item) { return { y: item.year, p: item.place, a: item.lat, n: item.lng, z: item.zoom, x: item.text, D: item.detail }; })
+        };
+    }
+
     function setStoryHash(config) {
         try {
-            var encoded = typeof LZString !== 'undefined' && LZString.compressToEncodedURIComponent
-                ? LZString.compressToEncodedURIComponent(JSON.stringify(config))
-                : encodeURIComponent(JSON.stringify(config));
+            var compact = minifyStoryConfig(config);
+            var encoded = typeof LZString !== 'undefined' && LZString.compressToEncodedURIComponent && compact
+                ? LZString.compressToEncodedURIComponent(JSON.stringify(compact))
+                : (typeof LZString !== 'undefined' && LZString.compressToEncodedURIComponent ? LZString.compressToEncodedURIComponent(JSON.stringify(config)) : encodeURIComponent(JSON.stringify(config)));
             var url = window.location.pathname + (window.location.search || '') + '#story=' + encoded;
             window.history.replaceState(null, '', url);
         } catch (e) { /* ignore */ }
@@ -319,7 +458,7 @@
         var storyId = getStoryId();
         var configUrl = getConfigUrl(storyId);
 
-        fetch(configUrl)
+        return fetch(configUrl)
             .then(function (res) {
                 if (!res.ok) throw new Error('Failed to load config: ' + res.status);
                 return res.json();
@@ -334,6 +473,7 @@
             });
     }
 
-    loadConfig().catch(function (err) { console.error(err); });
+    var loadPromise = loadConfig();
+    if (loadPromise && typeof loadPromise.catch === 'function') loadPromise.catch(function (err) { console.error(err); });
 })();
 

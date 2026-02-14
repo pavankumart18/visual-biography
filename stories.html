@@ -265,6 +265,63 @@
             height: 100%;
         }
 
+        /* Google Maps–style map type control */
+        .map-type-control-wrap {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            z-index: 1000;
+            font-family: 'Source Sans Pro', -apple-system, sans-serif;
+        }
+        .map-type-control {
+            position: relative;
+        }
+        .map-type-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 14px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
+            font-size: 14px;
+            color: #202124;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .map-type-btn:hover { background: #f8f9fa; }
+        .map-type-chevron {
+            font-size: 10px;
+            color: #5f6368;
+        }
+        .map-type-menu {
+            position: absolute;
+            bottom: 100%;
+            right: 0;
+            margin-bottom: 4px;
+            min-width: 140px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.15);
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            padding: 6px 0;
+            overflow: hidden;
+        }
+        .map-type-option {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            border: none;
+            background: none;
+            font-size: 14px;
+            color: #202124;
+            text-align: left;
+            cursor: pointer;
+        }
+        .map-type-option:hover { background: #f1f3f4; }
+        .map-type-option.selected { font-weight: 600; background: #e8f0fe; color: #1967d2; }
+
         /* Cards on the right — in main flow, one scroll for whole page */
         .story-steps-wrapper {
             width: 420px;
@@ -293,6 +350,17 @@
 
         .story-step-inner {
             text-align: left;
+        }
+
+        .story-step .step-image {
+            width: 100%;
+            height: auto;
+            max-height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            display: block;
+            background: var(--border);
         }
 
         .story-step .year {
