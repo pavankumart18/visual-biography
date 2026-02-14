@@ -48,7 +48,7 @@
   "footer": {
     "lines": [
       "A scrollytelling experience exploring the geographic journey of Nelson Mandela.",
-      "Data sourced from historical records and memoirs • Built with Leaflet.js"
+      "Data sourced from historical records and memoirs • Built with MapLibre GL JS"
     ]
   },
   "storyData": [

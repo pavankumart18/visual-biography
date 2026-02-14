@@ -7,7 +7,7 @@ Create and explore interactive map-based biographies. Generate stories with AI a
 - **Explore stories** – Pre-made biographies (Gandhi, Einstein, Nelson Mandela, and more) with map, timeline, and narrative.
 - **Generate your own** – Enter a person’s name or story outline; an AI produces a geographic biography in the same format.
 - **Shareable URLs** – The full story is encoded in the URL hash (compressed). Share the link or bookmark it; no server save or login needed.
-- **Scrollytelling map** – Scroll through the story while the map pans and zooms to each location (Leaflet.js).
+- **Scrollytelling map** – Scroll through the story while the map pans and zooms to each location (MapLibre GL JS).
 - **Editorial layout** – Drop caps, Playfair Display typography, and comic-style map popups.
 
 ## 🚀 Getting Started
@@ -54,7 +54,7 @@ Create and explore interactive map-based biographies. Generate stories with AI a
 
 ## 🛠️ Built with
 
-- **Leaflet.js** – Maps
+- **MapLibre GL JS** – Vector/raster maps (maplibre.org)
 - **Bootstrap 5** – Layout and UI
 - **bootstrap-llm-provider** – LLM API configuration
 - **LZString** – Compress story JSON for the URL

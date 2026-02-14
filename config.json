@@ -51,7 +51,7 @@
   "footer": {
     "lines": [
       "A scrollytelling experience exploring the geographic journey of Mahatma Gandhi.",
-      "Data sourced from historical records • Built with Leaflet.js"
+      "Data sourced from historical records • Built with MapLibre GL JS"
     ]
   },
   "storyData": [

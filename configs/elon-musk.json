@@ -50,7 +50,7 @@
   "footer": {
     "lines": [
       "A scrollytelling experience exploring the geographic journey of Elon Musk.",
-      "Data sourced from biographies and public records • Built with Leaflet.js"
+      "Data sourced from biographies and public records • Built with MapLibre GL JS"
     ]
   },
   "storyData": [

@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- MapLibre GL JS -->
+    <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3/dist/maplibre-gl.css">
 
     <!-- Fonts -->
     <link
@@ -404,22 +404,20 @@
             border-radius: 3px;
         }
 
-        /* ===== COMIC STYLE MAP POPUP ===== */
-        .leaflet-popup-content-wrapper {
+        /* ===== COMIC STYLE MAP POPUP (MapLibre) ===== */
+        .maplibregl-popup-content {
             background: var(--comic-yellow);
             border: 3px solid var(--comic-border);
             border-radius: 15px;
             box-shadow: 4px 4px 0 var(--comic-border);
             font-family: 'Comic Neue', cursive;
-        }
-
-        .leaflet-popup-tip-container {
-            display: none;
-        }
-
-        .leaflet-popup-content {
-            margin: 15px 18px;
+            margin: 0;
+            padding: 15px 18px;
             font-size: 14px;
+        }
+
+        .maplibregl-popup-tip {
+            display: none;
         }
 
         .popup-content .popup-year {
@@ -447,7 +445,7 @@
             color: var(--text-secondary);
         }
 
-        .leaflet-control-zoom {
+        .maplibregl-ctrl-group {
             display: none;
         }
 
@@ -572,7 +570,7 @@
     <!-- FOOTER -->
     <footer class="site-footer" id="footerContent"></footer>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@3/dist/maplibre-gl.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
     <script src="script.js"></script>
 </body>

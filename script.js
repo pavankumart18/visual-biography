@@ -121,33 +121,74 @@
 
     function initMapAndStory() {
         if (!config || !config.storyData || !config.storyData.length) return;
+        if (typeof maplibregl === 'undefined') {
+            console.error('MapLibre GL JS not loaded');
+            return;
+        }
 
         var storyData = config.storyData;
         var first = storyData[0];
-        var map = L.map('map', {
-            zoomControl: false,
-            attributionControl: false
-        }).setView([first.lat, first.lng], first.zoom);
 
-        var voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png');
-        var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
-        var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
-        var terrain = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17 });
-        var dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
-        var light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png');
+        function rasterStyle(tileUrlOrUrls) {
+            var tiles = Array.isArray(tileUrlOrUrls) ? tileUrlOrUrls : [tileUrlOrUrls];
+            return {
+                version: 8,
+                sources: { raster: { type: 'raster', tiles: tiles, tileSize: 256 } },
+                layers: [{ id: 'raster', type: 'raster', source: 'raster' }]
+            };
+        }
+        var styleMap = {
+            'Map': rasterStyle('https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
+            'Satellite': rasterStyle('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
+            'Terrain': rasterStyle(['https://a.tile.opentopomap.org/{z}/{x}/{y}.png', 'https://b.tile.opentopomap.org/{z}/{x}/{y}.png', 'https://c.tile.opentopomap.org/{z}/{x}/{y}.png']),
+            'Streets': rasterStyle('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'),
+            'Light': rasterStyle('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'),
+            'Dark': rasterStyle('https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png')
+        };
 
-        var layerList = [
-            { name: 'Map', layer: voyager },
-            { name: 'Satellite', layer: satellite },
-            { name: 'Terrain', layer: terrain },
-            { name: 'Streets', layer: streets },
-            { name: 'Light', layer: light },
-            { name: 'Dark', layer: dark }
-        ];
-        voyager.addTo(map);
-        var currentLayer = voyager;
-        var currentName = 'Map';
+        var map = new maplibregl.Map({
+            container: 'map',
+            style: styleMap['Map'],
+            center: [first.lng, first.lat],
+            zoom: first.zoom
+        });
 
+        var currentStyleName = 'Map';
+        var popup = new maplibregl.Popup({ closeButton: false });
+
+        function buildStoryGeoJSON() {
+            return {
+                type: 'FeatureCollection',
+                features: storyData.map(function (s, i) {
+                    return { type: 'Feature', id: i, geometry: { type: 'Point', coordinates: [s.lng, s.lat] }, properties: {} };
+                })
+            };
+        }
+
+        function addStoryLayers() {
+            if (!map.getSource('story-points')) {
+                map.addSource('story-points', { type: 'geojson', data: buildStoryGeoJSON(), promoteId: 'id' });
+            }
+            if (!map.getLayer('story-circles')) {
+                map.addLayer({
+                    id: 'story-circles',
+                    type: 'circle',
+                    source: 'story-points',
+                    paint: {
+                        'circle-radius': ['case', ['boolean', ['feature-state', 'active'], false], 12, 7],
+                        'circle-color': '#c41e3a',
+                        'circle-opacity': ['case', ['boolean', ['feature-state', 'active'], false], 1, 0.6],
+                        'circle-stroke-width': 2,
+                        'circle-stroke-color': '#fff'
+                    }
+                });
+            }
+        }
+
+        map.on('load', function () { addStoryLayers(); });
+        map.on('style.load', function () { addStoryLayers(); });
+
+        var layerList = ['Map', 'Satellite', 'Terrain', 'Streets', 'Light', 'Dark'];
         var mapTypeWrap = document.createElement('div');
         mapTypeWrap.className = 'map-type-control-wrap';
         mapTypeWrap.innerHTML = '<div class="map-type-control">' +
@@ -155,8 +196,8 @@
             '<span class="map-type-label">Map</span><span class="map-type-chevron">▼</span>' +
             '</button>' +
             '<div class="map-type-menu" role="listbox" hidden>' +
-            layerList.map(function (item) {
-                return '<button type="button" class="map-type-option" role="option" data-name="' + escapeHtml(item.name) + '">' + escapeHtml(item.name) + '</button>';
+            layerList.map(function (name) {
+                return '<button type="button" class="map-type-option" role="option" data-name="' + escapeHtml(name) + '">' + escapeHtml(name) + '</button>';
             }).join('') +
             '</div></div>';
         var mapContainer = document.getElementById('map');
@@ -183,30 +224,18 @@
         mapTypeOptions.forEach(function (opt) {
             opt.addEventListener('click', function () {
                 var name = this.getAttribute('data-name');
-                var item = layerList.find(function (i) { return i.name === name; });
-                if (!item) return;
-                map.removeLayer(currentLayer);
-                item.layer.addTo(map);
-                currentLayer = item.layer;
-                currentName = name;
+                var style = styleMap[name];
+                if (!style) return;
+                currentStyleName = name;
                 mapTypeLabel.textContent = name;
                 mapTypeMenu.hidden = true;
                 mapTypeBtn.setAttribute('aria-expanded', 'false');
                 mapTypeOptions.forEach(function (o) { o.classList.remove('selected'); });
                 this.classList.add('selected');
+                map.setStyle(typeof style === 'string' ? style : style);
             });
         });
         mapTypeWrap.querySelector('.map-type-option[data-name="Map"]').classList.add('selected');
-
-        var markers = storyData.map(function (s) {
-            return L.circleMarker([s.lat, s.lng], {
-                radius: 7,
-                fillColor: '#c41e3a',
-                fillOpacity: 0.7,
-                color: '#fff',
-                weight: 2
-            }).addTo(map);
-        });
 
         var wrapper = byId('storyStepsWrapper');
         var activeIndex = -1;
@@ -276,28 +305,25 @@
             });
 
             var step = storyData[index];
-            map.flyTo([step.lat, step.lng], step.zoom, { duration: 2.2, easeLinearity: 0.35 });
+            map.flyTo({ center: [step.lng, step.lat], zoom: step.zoom, duration: 2200 });
 
-            markers.forEach(function (m, i) {
-                m.setStyle({
-                    radius: i === index ? 12 : 7,
-                    fillOpacity: i === index ? 1 : 0.5
+            try {
+                storyData.forEach(function (_, i) {
+                    map.setFeatureState({ source: 'story-points', id: i }, { active: i === index });
                 });
-            });
+            } catch (e) { /* source may not be ready yet */ }
 
-            if (currentPopup) map.closePopup(currentPopup);
-
+            popup.remove();
             setTimeout(function () {
-                currentPopup = L.popup({ closeButton: false, offset: [0, -12] })
-                    .setLatLng([step.lat, step.lng])
-                    .setContent(
+                popup.setLngLat([step.lng, step.lat])
+                    .setHTML(
                         '<div class="popup-content">' +
                         '<div class="popup-year">' + step.year + '</div>' +
                         '<div class="popup-place">' + escapeHtml(step.place) + '</div>' +
                         '<div class="popup-text">' + escapeHtml(step.text) + '</div>' +
                         '</div>'
                     )
-                    .openOn(map);
+                    .addTo(map);
             }, 1600);
         }
 

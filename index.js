@@ -102,7 +102,7 @@ function normalizeStoryConfig(config) {
     mapSection: { intro: "Scroll to follow the journey. The map updates as you move." },
     articleReturn: { title: "Legacy", paragraphs: [""] },
     timeline: { title: "Key Milestones", items: [] },
-    footer: { lines: ["A scrollytelling experience.", "Built with Leaflet.js"] },
+    footer: { lines: ["A scrollytelling experience.", "Built with MapLibre GL JS"] },
   };
   const out = { ...defaults, ...config };
   out.meta = { ...defaults.meta, ...(config.meta || {}) };
@@ -266,7 +266,7 @@ Beijing, China: lat 39.9042, lng 116.4074
 For any other city: use precise decimal lat/lng (negative lat = Southern hemisphere; negative lng = West). Order storyData by year ascending.
 
 JSON shape (use this structure; fill with rich content and exact place names + lat/lng):
-{"meta":{"title":"Full Name – A Geographic Biography | The Story"},"header":{"logo":"The Geographic Story"},"hero":{"label":"A Visual Biography","title":"The Journey of [Name]","subtitle":"One or two sentences.","author":"Visual Stories Team","date":"2026"},"articleIntro":{"lead":"Three to four sentences.","dropCap":"Full paragraph.","dropCapHighlight":"phrase","paragraph":"Two to three sentences."},"dataSection":{"title":"The Numbers Behind the Journey","cards":[{"value":"XX","label":"Years of Life"},{"value":"X","label":"Key Locations"},{"value":"X","label":"Continents"},{"value":"X","label":"Years Abroad"}]},"mapSection":{"intro":"Scroll to follow the journey."},"articleReturn":{"title":"Legacy","paragraphs":["First full paragraph.","Second full paragraph."]},"timeline":{"title":"Key Milestones","items":[{"year":"YYYY","event":"Event"},{"year":"YYYY","event":"Event"}]},"footer":{"lines":["A scrollytelling experience.","Built with Leaflet.js"]},"storyData":[{"year":1900,"place":"City, Country","lat":48.8566,"lng":2.3522,"zoom":11,"text":"Two to three sentences.","detail":"Full paragraph with context and impact."}]}
+{"meta":{"title":"Full Name – A Geographic Biography | The Story"},"header":{"logo":"The Geographic Story"},"hero":{"label":"A Visual Biography","title":"The Journey of [Name]","subtitle":"One or two sentences.","author":"Visual Stories Team","date":"2026"},"articleIntro":{"lead":"Three to four sentences.","dropCap":"Full paragraph.","dropCapHighlight":"phrase","paragraph":"Two to three sentences."},"dataSection":{"title":"The Numbers Behind the Journey","cards":[{"value":"XX","label":"Years of Life"},{"value":"X","label":"Key Locations"},{"value":"X","label":"Continents"},{"value":"X","label":"Years Abroad"}]},"mapSection":{"intro":"Scroll to follow the journey."},"articleReturn":{"title":"Legacy","paragraphs":["First full paragraph.","Second full paragraph."]},"timeline":{"title":"Key Milestones","items":[{"year":"YYYY","event":"Event"},{"year":"YYYY","event":"Event"}]},"footer":{"lines":["A scrollytelling experience.","Built with MapLibre GL JS"]},"storyData":[{"year":1900,"place":"City, Country","lat":48.8566,"lng":2.3522,"zoom":11,"text":"Two to three sentences.","detail":"Full paragraph with context and impact."}]}
 
 Reply with ONLY the JSON object.`;
 
