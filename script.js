@@ -129,21 +129,23 @@
         var storyData = config.storyData;
         var first = storyData[0];
 
-        function rasterStyle(tileUrlOrUrls) {
+        function rasterStyle(tileUrlOrUrls, maxzoom) {
             var tiles = Array.isArray(tileUrlOrUrls) ? tileUrlOrUrls : [tileUrlOrUrls];
+            var src = { type: 'raster', tiles: tiles, tileSize: 256 };
+            if (maxzoom) src.maxzoom = maxzoom;
             return {
                 version: 8,
-                sources: { raster: { type: 'raster', tiles: tiles, tileSize: 256 } },
+                sources: { raster: src },
                 layers: [{ id: 'raster', type: 'raster', source: 'raster' }]
             };
         }
         var styleMap = {
-            'Map': rasterStyle('https://tile.openstreetmap.org/{z}/{x}/{y}.png'),
-            'Satellite': rasterStyle('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'),
-            'Terrain': rasterStyle(['https://a.tile.opentopomap.org/{z}/{x}/{y}.png', 'https://b.tile.opentopomap.org/{z}/{x}/{y}.png', 'https://c.tile.opentopomap.org/{z}/{x}/{y}.png']),
-            'Streets': rasterStyle('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png'),
-            'Light': rasterStyle('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png'),
-            'Dark': rasterStyle('https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png')
+            'Map': rasterStyle('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 19),
+            'Satellite': rasterStyle('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', 18),
+            'Terrain': rasterStyle('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', 19),
+            'Streets': rasterStyle('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', 19),
+            'Light': rasterStyle('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', 19),
+            'Dark': rasterStyle('https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 19)
         };
 
         var map = new maplibregl.Map({
