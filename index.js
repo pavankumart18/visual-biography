@@ -7,7 +7,8 @@ import { openaiConfig } from "https://cdn.jsdelivr.net/npm/bootstrap-llm-provide
 import { parse } from "https://cdn.jsdelivr.net/npm/partial-json@0.1.7/+esm";
 
 const $ = (sel, el = document) => el.querySelector(sel);
-const STORAGE_KEY = "storyTellingGeneratedConfig";
+const HISTORY_KEY = "storyTellingHistory_v1";
+const STORAGE_KEY = "storyTellingGeneratedConfig"; // for backward compat/temp draft
 
 /** Minify config to short keys for smaller URL. */
 function minifyStoryConfig(config) {
@@ -80,12 +81,12 @@ function parseStoryConfig(raw) {
   // Try full parse first
   try {
     return JSON.parse(str);
-  } catch (_) {}
+  } catch (_) { }
 
   // Try partial-json for truncated output
   try {
     return parse(str);
-  } catch (_) {}
+  } catch (_) { }
 
   return null;
 }
@@ -154,6 +155,24 @@ cardsContainer.innerHTML = (indexConfig.cards || []).map(
   </div>`
 ).join("");
 
+function getHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveToHistory(config) {
+  const history = getHistory();
+  // Avoid duplicates by title
+  const title = config.meta?.title;
+  const filtered = history.filter(h => h.meta?.title !== title);
+  filtered.unshift(config);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 12)));
+}
+
 function getDraftConfig() {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -166,26 +185,28 @@ function getDraftConfig() {
 function renderSavedStories() {
   const container = $("#saved-stories");
   if (!container) return;
-  const draft = getDraftConfig();
-  if (draft) {
-    const title = (draft.meta && draft.meta.title) ? draft.meta.title.replace(/\s*\|\s*The Story.*$/i, "").trim() : "Untitled story";
-    const encoded = encodeStoryForUrl(draft);
-    const href = encoded ? `stories.html#story=${encoded}` : "stories.html?generated=1";
-    container.innerHTML = `
-    <div class="col-md-4 col-lg-3">
-      <a href="${href}" class="text-decoration-none text-dark">
-        <div class="card demo-card h-100 text-center">
-          <div class="card-body d-flex flex-column">
-            <div class="mb-3"><i class="display-4 text-primary bi bi-link-45deg"></i></div>
-            <h6 class="card-title h5 mb-2">${title}</h6>
-            <p class="card-text small text-muted">Share or bookmark the link to keep it</p>
-            <span class="mt-auto btn btn-outline-primary btn-sm">View story</span>
+  const history = getHistory();
+  if (history.length > 0) {
+    container.innerHTML = history.map((draft) => {
+      const title = (draft.meta && draft.meta.title) ? draft.meta.title.replace(/\s*\|\s*The Story.*$/i, "").trim() : "Untitled story";
+      const encoded = encodeStoryForUrl(draft);
+      const href = encoded ? `stories.html#story=${encoded}` : "stories.html?generated=1";
+      return `
+      <div class="col-md-4 col-lg-3">
+        <a href="${href}" class="text-decoration-none text-dark">
+          <div class="card demo-card h-100 text-center shadow-sm">
+            <div class="card-body d-flex flex-column">
+              <div class="mb-3"><i class="display-4 text-primary bi bi-journal-bookmark-fill"></i></div>
+              <h6 class="card-title h6 mb-2">${title}</h6>
+              <p class="card-text small text-muted">Created in your history</p>
+              <span class="mt-auto btn btn-outline-primary btn-sm">View story</span>
+            </div>
           </div>
-        </div>
-      </a>
-    </div>`;
+        </a>
+      </div>`;
+    }).join("");
   } else {
-    container.innerHTML = '<p class="text-muted">Generate a story below—the link will be shareable and you can bookmark it.</p>';
+    container.innerHTML = '<p class="text-muted">Generate a story below—it will be saved to your local history and you can share the link.</p>';
   }
 }
 
@@ -309,6 +330,7 @@ Reply with ONLY the JSON object.`;
     config = config ? normalizeStoryConfig(config) : null;
     if (config && config.storyData && config.storyData.length > 0) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+      saveToHistory(config);
       const encoded = encodeStoryForUrl(config);
       const target = encoded ? `stories.html#story=${encoded}` : "stories.html?generated=1";
       showNotification("Story generated! Opening…", "success");

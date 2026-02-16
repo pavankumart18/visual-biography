@@ -9,6 +9,7 @@ Create and explore interactive map-based biographies. Generate stories with AI a
 - **Shareable URLs** – The full story is encoded in the URL hash (LZ-compressed). Share the link or bookmark it; no server save or login needed.
 - **Scrollytelling map** – Scroll through the story while the map pans and zooms to each location (MapLibre GL JS).
 - **Intelligent Image Discovery** – Automatically fetches photos from Wikipedia, with smart fallbacks (City → Region → Country) to ensure visual rich biographies.
+- **Persistent Story History** – Automatically remembers your generated biographies in a local history list, so you never lose a story.
 - **Map Reliability** – Integrated loading overlays and robust error handling for network-resilient map rendering.
 - **Multiple map styles** – Switch between high-quality styles (Map, Satellite, Terrain, Streets, etc.) on the fly.
 
