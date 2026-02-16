@@ -129,6 +129,21 @@
         var storyData = config.storyData;
         var first = storyData[0];
 
+        // MapTiler API Key - Get your free key at https://cloud.maptiler.com/
+        var MAPTILER_KEY = 'HMfa6VzcuB2I0YOnP2jM';
+
+        function getStyleUrl(name) {
+            var styles = {
+                'Map': 'https://api.maptiler.com/maps/streets-v2/style.json?key=' + MAPTILER_KEY,
+                'Satellite': 'raster-arcgis-satellite',
+                'Terrain': 'https://api.maptiler.com/maps/topo-v2/style.json?key=' + MAPTILER_KEY,
+                'Streets': 'https://api.maptiler.com/maps/openstreetmap/style.json?key=' + MAPTILER_KEY,
+                'Light': 'https://api.maptiler.com/maps/dataviz-light/style.json?key=' + MAPTILER_KEY,
+                'Dark': 'https://api.maptiler.com/maps/dataviz-dark/style.json?key=' + MAPTILER_KEY
+            };
+            return styles[name] || styles['Map'];
+        }
+
         function rasterStyle(tileUrlOrUrls, maxzoom) {
             var tiles = Array.isArray(tileUrlOrUrls) ? tileUrlOrUrls : [tileUrlOrUrls];
             var src = { type: 'raster', tiles: tiles, tileSize: 256 };
@@ -139,18 +154,14 @@
                 layers: [{ id: 'raster', type: 'raster', source: 'raster' }]
             };
         }
-        var styleMap = {
-            'Map': rasterStyle('https://tile.openstreetmap.org/{z}/{x}/{y}.png', 19),
-            'Satellite': rasterStyle('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', 18),
-            'Terrain': rasterStyle('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', 19),
-            'Streets': rasterStyle('https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png', 19),
-            'Light': rasterStyle('https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', 19),
-            'Dark': rasterStyle('https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', 19)
-        };
 
+        // Fast raster fallback for Satellite (ArcGIS is great and free)
+        var arcgisSatellite = rasterStyle('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', 18);
+
+        var firstStyle = getStyleUrl('Map');
         var map = new maplibregl.Map({
             container: 'map',
-            style: styleMap['Map'],
+            style: firstStyle === 'raster-arcgis-satellite' ? arcgisSatellite : firstStyle,
             center: [first.lng, first.lat],
             zoom: first.zoom
         });
@@ -226,15 +237,16 @@
         mapTypeOptions.forEach(function (opt) {
             opt.addEventListener('click', function () {
                 var name = this.getAttribute('data-name');
-                var style = styleMap[name];
-                if (!style) return;
+                var styleUrl = getStyleUrl(name);
                 currentStyleName = name;
                 mapTypeLabel.textContent = name;
                 mapTypeMenu.hidden = true;
                 mapTypeBtn.setAttribute('aria-expanded', 'false');
                 mapTypeOptions.forEach(function (o) { o.classList.remove('selected'); });
                 this.classList.add('selected');
-                map.setStyle(typeof style === 'string' ? style : style);
+
+                var finalStyle = styleUrl === 'raster-arcgis-satellite' ? arcgisSatellite : styleUrl;
+                map.setStyle(finalStyle);
             });
         });
         mapTypeWrap.querySelector('.map-type-option[data-name="Map"]').classList.add('selected');

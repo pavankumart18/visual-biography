@@ -12,12 +12,12 @@ Create and explore interactive map-based biographies. Generate stories with AI a
 
   | Style | Provider | Description |
   |-------|----------|-------------|
-  | **Map** | OpenStreetMap | Standard street and road map |
-  | **Satellite** | ArcGIS World Imagery | Satellite / aerial photography |
-  | **Terrain** | ArcGIS World Topo Map | Topographic map with elevation and terrain |
-  | **Streets** | CARTO Voyager | Clean, street-focused basemap |
-  | **Light** | CARTO Light | Minimal light-themed basemap |
-  | **Dark** | CARTO Dark | Dark-themed basemap |
+  | **Map** | MapTiler (Vector) | High-performance vector streets map |
+  | **Satellite** | ArcGIS (Raster) | Satellite / aerial photography |
+  | **Terrain** | MapTiler (Vector) | Topographic map with crisp contours |
+  | **Streets** | MapTiler (Vector) | Clean OpenStreetMap-based vector map |
+  | **Light** | MapTiler (Vector) | Minimalist light-themed vector basemap |
+  | **Dark** | MapTiler (Vector) | Professional dark-themed vector basemap |
 
 - **Editorial layout** – Drop caps, Playfair Display typography, data cards, timeline section, and comic-style map popups.
 - **Wikipedia images** – Story cards auto-fetch relevant images from Wikimedia for each location.
@@ -95,9 +95,9 @@ Click any story card on the home page (e.g. *Gandhi*, *Albert Einstein*). You'll
 
 ### Tile Providers
 
-- [OpenStreetMap](https://www.openstreetmap.org/) – Map tiles
-- [ArcGIS / Esri](https://www.arcgis.com/) – Satellite imagery and topographic tiles
-- [CARTO](https://carto.com/basemaps/) – Voyager, Light, and Dark basemaps
+- [MapTiler](https://www.maptiler.com/) – Primary provider for high-performance Vector Tiles
+- [ArcGIS / Esri](https://www.arcgis.com/) – Satellite imagery (Raster)
+- [OpenStreetMap](https://www.openstreetmap.org/) – Map data source
 
 ## 📝 License
 
