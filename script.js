@@ -333,13 +333,43 @@
         var placeholderImg = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><rect fill="#e8e8e8" width="800" height="400"/><text fill="#999" x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="18">Image not available</text></svg>');
 
         steps.forEach(function (stepEl, index) {
-            var placeKeyword = stepEl.dataset.placeKeyword || (storyData[index] && storyData[index].place);
-            if (placeKeyword && placeKeyword.split) placeKeyword = placeKeyword.split(',')[0].trim();
+            var fullPlace = storyData[index] && storyData[index].place;
             var img = stepEl.querySelector('.step-image');
             if (!img) return;
-            if (!placeKeyword) { img.src = placeholderImg; return; }
-            getWikimediaImageUrl(placeKeyword, function (url) {
-                img.src = url || placeholderImg;
+            if (!fullPlace) { img.src = placeholderImg; return; }
+
+            var parts = fullPlace.split(',').map(function (p) { return p.trim(); });
+            var primary = parts[0];
+            var secondary = parts.length > 2 ? parts[parts.length - 2] : null; // state/region
+            var fallback = parts[parts.length - 1]; // country
+
+            function tryLoad(keywords, next) {
+                getWikimediaImageUrl(keywords, function (url) {
+                    if (url) {
+                        img.src = url;
+                    } else if (next) {
+                        next();
+                    } else {
+                        img.src = placeholderImg;
+                    }
+                });
+            }
+
+            // Chain: Primary (City) -> Secondary (State) -> Fallback (Country)
+            tryLoad(primary, function () {
+                if (secondary && secondary !== primary) {
+                    tryLoad(secondary, function () {
+                        if (fallback && fallback !== secondary && fallback !== primary) {
+                            tryLoad(fallback, null);
+                        } else {
+                            img.src = placeholderImg;
+                        }
+                    });
+                } else if (fallback && fallback !== primary) {
+                    tryLoad(fallback, null);
+                } else {
+                    img.src = placeholderImg;
+                }
             });
         });
 
