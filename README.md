@@ -8,16 +8,18 @@ Create and explore interactive map-based biographies. Generate stories with AI a
 - **Generate your own** – Enter a person's name or story outline; an AI produces a geographic biography in the same format.
 - **Shareable URLs** – The full story is encoded in the URL hash (LZ-compressed). Share the link or bookmark it; no server save or login needed.
 - **Scrollytelling map** – Scroll through the story while the map pans and zooms to each location (MapLibre GL JS).
-- **Multiple map styles** – Switch between 6 map types on the fly:
+- **Map Details Drawer** – Google Maps–style interface to toggle base maps (Default, Satellite), Terrain overlays, and Labels.
+- **Vector Tiles** – Powered by MapTiler for crisp, high-performance rendering.
+- **Multiple map styles** – Switch between high-quality styles on the fly:
 
   | Style | Provider | Description |
   |-------|----------|-------------|
-  | **Map** | MapTiler (Vector) | High-performance vector streets map |
-  | **Satellite** | ArcGIS (Raster) | Satellite / aerial photography |
-  | **Terrain** | MapTiler (Vector) | Topographic map with crisp contours |
-  | **Streets** | MapTiler (Vector) | Clean OpenStreetMap-based vector map |
-  | **Light** | MapTiler (Vector) | Minimalist light-themed vector basemap |
-  | **Dark** | MapTiler (Vector) | Professional dark-themed vector basemap |
+  | **Map** | MapTiler (Vector) | Standard high-detail streets and roads |
+  | **Satellite** | ArcGIS (Raster) | High-resolution aerial and satellite imagery |
+  | **Terrain** | MapTiler (Vector) | Topographic map with elevation and contours |
+  | **Streets** | MapTiler (Vector) | Clean OpenStreetMap-based vector style |
+  | **Light** | MapTiler (Vector) | Minimal, light-themed map for visualization |
+  | **Dark** | MapTiler (Vector) | High-contrast dark-themed professional map |
 
 - **Editorial layout** – Drop caps, Playfair Display typography, data cards, timeline section, and comic-style map popups.
 - **Wikipedia images** – Story cards auto-fetch relevant images from Wikimedia for each location.

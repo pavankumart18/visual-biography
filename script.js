@@ -201,59 +201,82 @@
         map.on('load', function () { addStoryLayers(); });
         map.on('style.load', function () { addStoryLayers(); });
 
-        var layerList = ['Map', 'Satellite', 'Terrain', 'Streets', 'Light', 'Dark'];
-        var mapTypeWrap = document.createElement('div');
-        mapTypeWrap.className = 'map-type-control-wrap';
-        mapTypeWrap.innerHTML = '<div class="map-type-control">' +
-            '<button type="button" class="map-type-btn" aria-haspopup="listbox" aria-expanded="false" aria-label="Map type">' +
-            '<span class="map-type-label">Map</span><span class="map-type-chevron">▼</span>' +
-            '</button>' +
-            '<div class="map-type-menu" role="listbox" hidden>' +
-            layerList.map(function (name) {
-                return '<button type="button" class="map-type-option" role="option" data-name="' + escapeHtml(name) + '">' + escapeHtml(name) + '</button>';
-            }).join('') +
-            '</div></div>';
-        var mapContainer = document.getElementById('map');
-        if (mapContainer && mapContainer.parentNode) mapContainer.parentNode.appendChild(mapTypeWrap);
+        // Map Details Drawer Logic
+        var drawer = document.getElementById('mapDetailsDrawer');
+        var toggleBtn = document.getElementById('toggleDrawerBtn');
+        var closeBtn = document.getElementById('closeDrawerBtn');
+        var mapTypeItems = document.querySelectorAll('.map-type-item');
+        var gridOptions = document.querySelectorAll('.grid-option');
+        var labelsCheckbox = document.getElementById('toggleLabels');
 
-        var mapTypeBtn = mapTypeWrap.querySelector('.map-type-btn');
-        var mapTypeLabel = mapTypeWrap.querySelector('.map-type-label');
-        var mapTypeMenu = mapTypeWrap.querySelector('.map-type-menu');
-        var mapTypeOptions = mapTypeWrap.querySelectorAll('.map-type-option');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                drawer.classList.toggle('visible');
+            });
+        }
 
-        mapTypeBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var isOpen = !mapTypeMenu.hidden;
-            mapTypeMenu.hidden = isOpen;
-            mapTypeBtn.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-        });
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function () {
+                drawer.classList.remove('visible');
+            });
+        }
+
         document.addEventListener('click', function (e) {
-            if (!mapTypeMenu.hidden && !mapTypeWrap.contains(e.target)) {
-                mapTypeMenu.hidden = true;
-                mapTypeBtn.setAttribute('aria-expanded', 'false');
+            if (drawer && drawer.classList.contains('visible') && !drawer.contains(e.target) && !toggleBtn.contains(e.target)) {
+                drawer.classList.remove('visible');
             }
         });
 
-        mapTypeOptions.forEach(function (opt) {
-            opt.addEventListener('click', function () {
-                var name = this.getAttribute('data-name');
-                var styleUrl = getStyleUrl(name);
-                currentStyleName = name;
-                mapTypeLabel.textContent = name;
-                mapTypeMenu.hidden = true;
-                mapTypeBtn.setAttribute('aria-expanded', 'false');
-                mapTypeOptions.forEach(function (o) { o.classList.remove('selected'); });
-                this.classList.add('selected');
+        mapTypeItems.forEach(function (item) {
+            item.addEventListener('click', function () {
+                var type = this.dataset.type;
+                var styleUrl = type === 'satellite' ? 'raster-arcgis-satellite' : getStyleUrl('Map');
+
+                mapTypeItems.forEach(function (i) { i.classList.remove('active'); });
+                this.classList.add('active');
 
                 var finalStyle = styleUrl === 'raster-arcgis-satellite' ? arcgisSatellite : styleUrl;
                 map.setStyle(finalStyle);
+                currentStyleName = type === 'satellite' ? 'Satellite' : 'Map';
+
+                // Keep labels checkbox in sync
+                setTimeout(updateLabels, 500);
             });
         });
-        mapTypeWrap.querySelector('.map-type-option[data-name="Map"]').classList.add('selected');
+
+        if (labelsCheckbox) {
+            labelsCheckbox.addEventListener('change', updateLabels);
+        }
+
+        function updateLabels() {
+            var show = labelsCheckbox.checked;
+            var style = map.getStyle();
+            if (!style || !style.layers) return;
+
+            style.layers.forEach(function (layer) {
+                if (layer.type === 'symbol' && layer.layout && layer.layout['text-field']) {
+                    map.setLayoutProperty(layer.id, 'visibility', show ? 'visible' : 'none');
+                }
+            });
+        }
+
+        gridOptions.forEach(function (opt) {
+            opt.addEventListener('click', function () {
+                var layer = this.dataset.layer;
+                if (layer === 'terrain') {
+                    var styleUrl = getStyleUrl('Terrain');
+                    map.setStyle(styleUrl);
+                    currentStyleName = 'Terrain';
+                    mapTypeItems.forEach(function (i) { i.classList.remove('active'); });
+                    gridOptions.forEach(function (i) { i.classList.remove('active'); });
+                    this.classList.add('active');
+                }
+            });
+        });
 
         var wrapper = byId('storyStepsWrapper');
         var activeIndex = -1;
-        var currentPopup = null;
 
         function getWikimediaImageUrl(title, callback) {
             if (!title || !title.trim()) { callback(null); return; }
@@ -516,4 +539,3 @@
     var loadPromise = loadConfig();
     if (loadPromise && typeof loadPromise.catch === 'function') loadPromise.catch(function (err) { console.error(err); });
 })();
-

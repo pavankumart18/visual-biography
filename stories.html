@@ -9,10 +9,11 @@
     <!-- MapLibre GL JS -->
     <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@3/dist/maplibre-gl.css">
 
-    <!-- Fonts -->
+    <!-- Fonts & Icons -->
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Source+Sans+Pro:wght@300;400;600&family=Comic+Neue:wght@400;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
         :root {
@@ -257,7 +258,7 @@
             color: var(--text-primary);
             z-index: 1000;
             font-size: 14px;
-            text-shadow: 0 1px 2px rgba(255,255,255,0.9);
+            text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
         }
 
         #map {
@@ -265,62 +266,170 @@
             height: 100%;
         }
 
-        /* Google Maps–style map type control */
-        .map-type-control-wrap {
+        /* Map Details Drawer (Google Maps Style) */
+        .map-control-btn {
             position: absolute;
-            bottom: 12px;
-            right: 12px;
+            bottom: 24px;
+            right: 24px;
             z-index: 1000;
-            font-family: 'Source Sans Pro', -apple-system, sans-serif;
-        }
-        .map-type-control {
-            position: relative;
-        }
-        .map-type-btn {
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
             display: flex;
             align-items: center;
-            gap: 4px;
-            padding: 10px 14px;
-            background: #fff;
-            border: 1px solid rgba(0,0,0,0.15);
-            border-radius: 8px;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.12);
-            font-size: 14px;
-            color: #202124;
+            justify-content: center;
             cursor: pointer;
-            white-space: nowrap;
+            color: #5f6368;
+            font-size: 24px;
+            transition: background 0.2s;
         }
-        .map-type-btn:hover { background: #f8f9fa; }
-        .map-type-chevron {
-            font-size: 10px;
+
+        .map-control-btn:hover {
+            background: #f1f3f4;
+        }
+
+        .map-details-drawer {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 320px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            z-index: 1001;
+            padding: 20px;
+            display: none;
+            font-family: 'Source Sans Pro', sans-serif;
+            color: #3c4043;
+        }
+
+        .map-details-drawer.visible {
+            display: block;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .drawer-header h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .close-drawer {
+            cursor: pointer;
+            font-size: 20px;
             color: #5f6368;
         }
-        .map-type-menu {
-            position: absolute;
-            bottom: 100%;
-            right: 0;
-            margin-bottom: 4px;
-            min-width: 140px;
-            background: #fff;
-            border: 1px solid rgba(0,0,0,0.15);
-            border-radius: 8px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-            padding: 6px 0;
-            overflow: hidden;
+
+        .drawer-section {
+            margin-bottom: 24px;
         }
-        .map-type-option {
-            display: block;
-            width: 100%;
-            padding: 10px 16px;
-            border: none;
-            background: none;
+
+        .drawer-section h4 {
             font-size: 14px;
-            color: #202124;
-            text-align: left;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #5f6368;
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .grid-option {
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-icon {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 6px;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            font-size: 28px;
+            color: #1a73e8;
+        }
+
+        .grid-option.active .option-icon {
+            border-color: #1a73e8;
+            background: #e8f0fe;
+        }
+
+        .option-label {
+            font-size: 12px;
+            color: #3c4043;
+        }
+
+        .map-types-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .map-type-item {
+            text-align: center;
             cursor: pointer;
         }
-        .map-type-option:hover { background: #f1f3f4; }
-        .map-type-option.selected { font-weight: 600; background: #e8f0fe; color: #1967d2; }
+
+        .type-preview {
+            width: 100%;
+            height: 80px;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            margin-bottom: 6px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .map-type-item.active .type-preview {
+            border-color: #1a73e8;
+        }
+
+        .map-type-item.active .type-label {
+            color: #1a73e8;
+            font-weight: 600;
+        }
+
+        .type-label {
+            font-size: 14px;
+        }
+
+        .drawer-footer {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .drawer-footer label {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+
+        .drawer-footer input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
 
         /* Cards on the right — in main flow, one scroll for whole page */
         .story-steps-wrapper {
@@ -511,7 +620,6 @@
             font-size: 14px;
             color: #aaa;
         }
-
     </style>
 </head>
 
@@ -549,6 +657,70 @@
         <section class="map-section" id="mapSection">
             <p class="section-intro" id="mapSectionIntro"></p>
             <div id="map"></div>
+
+            <!-- Map Control Button -->
+            <div class="map-control-btn" id="toggleDrawerBtn" title="Map details">
+                <i class="bi bi-layers"></i>
+            </div>
+
+            <!-- Map Details Drawer -->
+            <div class="map-details-drawer" id="mapDetailsDrawer">
+                <div class="drawer-header">
+                    <h3>Map details</h3>
+                    <div class="close-drawer" id="closeDrawerBtn"><i class="bi bi-x-lg"></i></div>
+                </div>
+
+                <div class="drawer-section">
+                    <h4>Map details</h4>
+                    <div class="grid-options">
+                        <div class="grid-option" data-layer="transit">
+                            <div class="option-icon"><i class="bi bi-train-front"></i></div>
+                            <div class="option-label">Transit</div>
+                        </div>
+                        <div class="grid-option" data-layer="traffic">
+                            <div class="option-icon"><i class="bi bi-sign-turn-right"></i></div>
+                            <div class="option-label">Traffic</div>
+                        </div>
+                        <div class="grid-option" data-layer="biking">
+                            <div class="option-icon"><i class="bi bi-bicycle"></i></div>
+                            <div class="option-label">Biking</div>
+                        </div>
+                        <div class="grid-option active" data-layer="terrain">
+                            <div class="option-icon"><i class="bi bi-graph-up"></i></div>
+                            <div class="option-label">Terrain</div>
+                        </div>
+                        <div class="grid-option" data-layer="3d">
+                            <div class="option-icon"><i class="bi bi-badge-3d"></i></div>
+                            <div class="option-label">3D Buildings</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drawer-section">
+                    <h4>Map type</h4>
+                    <div class="map-types-grid">
+                        <div class="map-type-item active" data-type="default">
+                            <div class="type-preview"
+                                style="background-image: url('https://api.maptiler.com/maps/streets-v2/static/0,0,1/300x200.png?key=HMfa6VzcuB2I0YOnP2jM')">
+                            </div>
+                            <div class="type-label">Default</div>
+                        </div>
+                        <div class="map-type-item" data-type="satellite">
+                            <div class="type-preview"
+                                style="background-image: url('https://api.maptiler.com/maps/satellite/static/0,0,1/300x200.jpg?key=HMfa6VzcuB2I0YOnP2jM')">
+                            </div>
+                            <div class="type-label">Satellite</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="drawer-footer">
+                    <label>
+                        <input type="checkbox" id="toggleLabels" checked>
+                        <span>Labels</span>
+                    </label>
+                </div>
+            </div>
         </section>
         <div class="story-steps-wrapper" id="storyStepsWrapper">
             <!-- Steps injected by script.js from config.json -->
@@ -576,4 +748,3 @@
 </body>
 
 </html>
-
