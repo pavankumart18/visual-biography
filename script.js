@@ -319,8 +319,23 @@
                 '<div class="year">' + step.year + '</div>' +
                 '<div class="place">' + escapeHtml(step.place) + '</div>' +
                 '<div class="text">' + escapeHtml(step.text) + '</div>' +
-                (step.detail ? '<div class="detail">' + escapeHtml(step.detail) + '</div>' : '') +
+                (step.detail ?
+                    '<div class="detail-container collapsed">' +
+                    '<div class="detail-text">' + escapeHtml(step.detail) + '</div>' +
+                    '</div>' +
+                    '<button class="read-more-btn">Read more</button>' : '') +
                 '</div>';
+
+            // Add Read More listener
+            var btn = div.querySelector('.read-more-btn');
+            if (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var container = div.querySelector('.detail-container');
+                    var isCollapsed = container.classList.toggle('collapsed');
+                    btn.textContent = isCollapsed ? 'Read more' : 'Read less';
+                });
+            }
             div.addEventListener('click', function () {
                 div.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 activateStep(index);
@@ -414,24 +429,37 @@
 
         function onScroll() {
             if (isSwitchingStyle) return;
-            var viewportCenterY = window.innerHeight / 2;
+
+            var isMobile = window.innerWidth < 992;
+
+            // Calculate trigger point
+            // Mobile: map is top 50%, cards are bottom 50%. Trigger when card hits center of bottom half (75%)
+            // Desktop: side by side. Trigger when card hits center of screen (50%)
+            var triggerY = isMobile ? (window.innerHeight * 0.75) : (window.innerHeight / 2);
+
             var found = -1;
             steps.forEach(function (step, index) {
                 var rect = step.getBoundingClientRect();
-                if (rect.top <= viewportCenterY && rect.bottom >= viewportCenterY) {
+                // Check if step crosses the trigger line
+                if (rect.top <= triggerY && rect.bottom >= triggerY) {
                     found = index;
                 }
             });
+
             if (found < 0 && steps.length > 0) {
                 var first = steps[0].getBoundingClientRect();
                 var last = steps[steps.length - 1].getBoundingClientRect();
-                if (viewportCenterY < first.top) found = 0;
-                else if (viewportCenterY > last.bottom) found = steps.length - 1;
+                if (triggerY < first.top) found = 0;
+                else if (triggerY > last.bottom) found = steps.length - 1;
             }
             if (found >= 0 && found !== activeIndex) activateStep(found);
         }
+
+        // Attach to both to handle resize/mode switches seamlessly
         window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
+        wrapper.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll, { passive: true });
+        setTimeout(onScroll, 100);
     }
 
     function run() {

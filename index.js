@@ -236,16 +236,18 @@ $("#generate-form").addEventListener("submit", async (e) => {
 Person or topic: "${input}"
 
 IMPORTANT – Be descriptive and detailed:
-- hero.subtitle: 1–2 full sentences summarizing their journey and why it matters.
+- hero.subtitle: 1–2 evocative sentences capturing the essence of their journey.
 - articleIntro.lead: 3–4 sentences setting the scene and why this person's geography matters.
-- articleIntro.dropCap: A full paragraph (4–5 sentences) starting with their birth/roots; vivid and narrative.
+- articleIntro.dropCap: A full, beautifully written paragraph (4–5 sentences) starting with their birth/roots; vivid, narrative, and engaging.
 - articleIntro.dropCapHighlight: A short 3–5 word phrase from dropCap to highlight.
 - articleIntro.paragraph: 2–3 sentences linking the map to the story.
 - articleReturn.paragraphs: Two substantial paragraphs (3–4 sentences each) on their legacy and impact.
-- timeline.items: 8–12 items; each event can be a short phrase (e.g. "Elected president; launches reform programme").
-- storyData: 6–10 items. For EACH item: "text" = 2–3 sentences (what happened here, why it matters). "detail" = a full paragraph (4–6 sentences) with context, consequences, and vivid detail. Write like a biography, not a list.
+- timeline.items: 10–15 items; each event can be a short phrase (e.g. "Elected president; launches reform programme").
+- storyData: 12–18 items. For EACH item: "text" = 2–3 evocative sentences (focus on atmosphere, emotion, and the 'feel' of the place). "detail" = two substantial paragraphs (6-10 sentences total) with rich sensory details, narrative depth, and historical context. Avoid dry facts; tell a compelling story about this specific moment in their life.
 
 PLACES – Use accurate, full place names:
+- NEVER repeat the same location consecutively. If multiple events happen in the same place, combine them into one rich step.
+- TRY to use each location only once unless returning there is essential to the story arc.
 - "place" must be "City, Country" (e.g. "London, United Kingdom", "New York, United States", "Mumbai, India"). For US cities you may use "City, State, United States" (e.g. "Palo Alto, California, United States"). Use the correct spelling and the country name, not abbreviations.
 - Use the latitude and longitude table below for each location. If a city is not listed, look up and use precise decimal coordinates (lat and lng as numbers, e.g. 51.5074 and -0.1278). Every storyData entry MUST have exact numeric "lat" and "lng"; do not omit or approximate vaguely.
 
