@@ -8,7 +8,7 @@ Create and explore interactive map-based biographies. Generate stories with AI a
 - **Generate your own** – Enter a person's name or story outline; an AI produces a geographic biography in the same format.
 - **Shareable URLs** – The full story is encoded in the URL hash (LZ-compressed). Share the link or bookmark it; no server save or login needed.
 - **Scrollytelling map** – Scroll through the story while the map pans and zooms to each location (MapLibre GL JS).
-- **Scrollytelling map** – Scroll through the story while the map pans and zooms to each location (MapLibre GL JS).
+- **Map Reliability** – Integrated loading overlays and robust error handling for network-resilient map rendering.
 - **Multiple map styles** – Switch between high-quality styles (Map, Satellite, Terrain, Streets, etc.) on the fly.
 
   | Style | Provider | Description |

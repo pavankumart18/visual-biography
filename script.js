@@ -14,10 +14,6 @@
         if (el && value != null) el.textContent = value;
     }
 
-    function html(el, value) {
-        if (el && value != null) el.innerHTML = value;
-    }
-
     function fillFromConfig() {
         if (!config) return;
 
@@ -163,11 +159,43 @@
             container: 'map',
             style: firstStyle === 'raster-arcgis-satellite' ? arcgisSatellite : firstStyle,
             center: [first.lng, first.lat],
-            zoom: first.zoom
+            zoom: first.zoom,
+            failIfMajorPerformanceCaveat: false
         });
 
         var currentStyleName = 'Map';
         var popup = new maplibregl.Popup({ closeButton: false });
+        var activeIndex = -1;
+
+        var loader = document.getElementById('mapLoader');
+        function hideLoader() {
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(function () { loader.style.display = 'none'; }, 500);
+            }
+        }
+
+        map.on('load', function () {
+            addStoryLayers();
+            hideLoader();
+        });
+
+        map.on('style.load', function () {
+            addStoryLayers();
+            if (activeIndex >= 0) activateStep(activeIndex, true);
+        });
+
+        map.on('error', function (e) {
+            console.error('Map Error:', e);
+            // Only show full error if we haven't loaded anything yet
+            if (loader && loader.style.display !== 'none') {
+                loader.innerHTML = '<div style="color:#c41e3a;padding:20px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">' +
+                    '<strong>Map provider connection lost</strong><br>' +
+                    '<small style="display:block;margin:10px 0;">This is usually due to network restrictions or API rate limits.</small>' +
+                    '<button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;cursor:pointer;background:#c41e3a;color:#fff;border:none;border-radius:4px;">Retry</button>' +
+                    '</div>';
+            }
+        });
 
         function buildStoryGeoJSON() {
             return {
@@ -198,9 +226,6 @@
             }
         }
 
-        map.on('load', function () { addStoryLayers(); });
-        map.on('style.load', function () { addStoryLayers(); });
-
         var layerList = ['Map', 'Satellite', 'Terrain', 'Streets', 'Light', 'Dark'];
         var mapTypeWrap = document.createElement('div');
         mapTypeWrap.className = 'map-type-control-wrap';
@@ -221,6 +246,7 @@
         var mapTypeMenu = mapTypeWrap.querySelector('.map-type-menu');
         var mapTypeOptions = mapTypeWrap.querySelectorAll('.map-type-option');
 
+        var isSwitchingStyle = false;
         mapTypeBtn.addEventListener('click', function (e) {
             e.stopPropagation();
             var isOpen = !mapTypeMenu.hidden;
@@ -236,7 +262,13 @@
 
         mapTypeOptions.forEach(function (opt) {
             opt.addEventListener('click', function () {
+                if (isSwitchingStyle) return;
                 var name = this.getAttribute('data-name');
+                if (name === currentStyleName) {
+                    mapTypeMenu.hidden = true;
+                    return;
+                }
+
                 var styleUrl = getStyleUrl(name);
                 currentStyleName = name;
                 mapTypeLabel.textContent = name;
@@ -245,14 +277,16 @@
                 mapTypeOptions.forEach(function (o) { o.classList.remove('selected'); });
                 this.classList.add('selected');
 
+                isSwitchingStyle = true;
                 var finalStyle = styleUrl === 'raster-arcgis-satellite' ? arcgisSatellite : styleUrl;
+
+                map.once('idle', function () { isSwitchingStyle = false; });
                 map.setStyle(finalStyle);
             });
         });
         mapTypeWrap.querySelector('.map-type-option[data-name="Map"]').classList.add('selected');
 
         var wrapper = byId('storyStepsWrapper');
-        var activeIndex = -1;
 
         function getWikimediaImageUrl(title, callback) {
             if (!title || !title.trim()) { callback(null); return; }
@@ -309,8 +343,9 @@
             });
         });
 
-        function activateStep(index) {
+        function activateStep(index, skipFly) {
             if (index < 0 || index >= storyData.length) return;
+            if (index === activeIndex && !skipFly) return;
             activeIndex = index;
 
             steps.forEach(function (s, i) {
@@ -318,16 +353,19 @@
             });
 
             var step = storyData[index];
-            map.flyTo({ center: [step.lng, step.lat], zoom: step.zoom, duration: 2200 });
+            if (!skipFly) {
+                map.flyTo({ center: [step.lng, step.lat], zoom: step.zoom, duration: 2200 });
+            }
 
             try {
                 storyData.forEach(function (_, i) {
                     map.setFeatureState({ source: 'story-points', id: i }, { active: i === index });
                 });
-            } catch (e) { /* source may not be ready yet */ }
+            } catch (e) { /* ignore if feature not ready */ }
 
             popup.remove();
             setTimeout(function () {
+                if (activeIndex !== index) return;
                 popup.setLngLat([step.lng, step.lat])
                     .setHTML(
                         '<div class="popup-content">' +
@@ -340,10 +378,12 @@
             }, 1600);
         }
 
-        setTimeout(function () { activateStep(0); }, 500);
+        map.once('load', function () {
+            setTimeout(function () { activateStep(0); }, 500);
+        });
 
-        // One scroll — active step = which card's vertical range contains viewport center
         function onScroll() {
+            if (isSwitchingStyle) return;
             var viewportCenterY = window.innerHeight / 2;
             var found = -1;
             steps.forEach(function (step, index) {
