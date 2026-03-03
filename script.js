@@ -14,10 +14,6 @@
         if (el && value != null) el.textContent = value;
     }
 
-    function html(el, value) {
-        if (el && value != null) el.innerHTML = value;
-    }
-
     function fillFromConfig() {
         if (!config) return;
 
@@ -121,33 +117,116 @@
 
     function initMapAndStory() {
         if (!config || !config.storyData || !config.storyData.length) return;
+        if (typeof maplibregl === 'undefined') {
+            console.error('MapLibre GL JS not loaded');
+            return;
+        }
 
         var storyData = config.storyData;
         var first = storyData[0];
-        var map = L.map('map', {
-            zoomControl: false,
-            attributionControl: false
-        }).setView([first.lat, first.lng], first.zoom);
 
-        var voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png');
-        var satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
-        var streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
-        var terrain = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', { maxZoom: 17 });
-        var dark = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png');
-        var light = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png');
+        // MapTiler API Key - Get your free key at https://cloud.maptiler.com/
+        var MAPTILER_KEY = 'HMfa6VzcuB2I0YOnP2jM';
 
-        var layerList = [
-            { name: 'Map', layer: voyager },
-            { name: 'Satellite', layer: satellite },
-            { name: 'Terrain', layer: terrain },
-            { name: 'Streets', layer: streets },
-            { name: 'Light', layer: light },
-            { name: 'Dark', layer: dark }
-        ];
-        voyager.addTo(map);
-        var currentLayer = voyager;
-        var currentName = 'Map';
+        function getStyleUrl(name) {
+            var styles = {
+                'Map': 'https://api.maptiler.com/maps/streets-v2/style.json?key=' + MAPTILER_KEY,
+                'Satellite': 'raster-arcgis-satellite',
+                'Terrain': 'https://api.maptiler.com/maps/topo-v2/style.json?key=' + MAPTILER_KEY,
+                'Streets': 'https://api.maptiler.com/maps/openstreetmap/style.json?key=' + MAPTILER_KEY,
+                'Light': 'https://api.maptiler.com/maps/dataviz-light/style.json?key=' + MAPTILER_KEY,
+                'Dark': 'https://api.maptiler.com/maps/dataviz-dark/style.json?key=' + MAPTILER_KEY
+            };
+            return styles[name] || styles['Map'];
+        }
 
+        function rasterStyle(tileUrlOrUrls, maxzoom) {
+            var tiles = Array.isArray(tileUrlOrUrls) ? tileUrlOrUrls : [tileUrlOrUrls];
+            var src = { type: 'raster', tiles: tiles, tileSize: 256 };
+            if (maxzoom) src.maxzoom = maxzoom;
+            return {
+                version: 8,
+                sources: { raster: src },
+                layers: [{ id: 'raster', type: 'raster', source: 'raster' }]
+            };
+        }
+
+        // Fast raster fallback for Satellite (ArcGIS is great and free)
+        var arcgisSatellite = rasterStyle('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', 18);
+
+        var firstStyle = getStyleUrl('Map');
+        var map = new maplibregl.Map({
+            container: 'map',
+            style: firstStyle === 'raster-arcgis-satellite' ? arcgisSatellite : firstStyle,
+            center: [first.lng, first.lat],
+            zoom: first.zoom,
+            failIfMajorPerformanceCaveat: false
+        });
+
+        var currentStyleName = 'Map';
+        var popup = new maplibregl.Popup({ closeButton: false });
+        var activeIndex = -1;
+
+        var loader = document.getElementById('mapLoader');
+        function hideLoader() {
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(function () { loader.style.display = 'none'; }, 500);
+            }
+        }
+
+        map.on('load', function () {
+            addStoryLayers();
+            hideLoader();
+        });
+
+        map.on('style.load', function () {
+            addStoryLayers();
+            if (activeIndex >= 0) activateStep(activeIndex, true);
+        });
+
+        map.on('error', function (e) {
+            console.error('Map Error:', e);
+            // Only show full error if we haven't loaded anything yet
+            if (loader && loader.style.display !== 'none') {
+                loader.innerHTML = '<div style="color:#c41e3a;padding:20px;text-align:center;background:#fff;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);">' +
+                    '<strong>Map provider connection lost</strong><br>' +
+                    '<small style="display:block;margin:10px 0;">This is usually due to network restrictions or API rate limits.</small>' +
+                    '<button onclick="location.reload()" style="margin-top:10px;padding:8px 16px;cursor:pointer;background:#c41e3a;color:#fff;border:none;border-radius:4px;">Retry</button>' +
+                    '</div>';
+            }
+        });
+
+        function buildStoryGeoJSON() {
+            return {
+                type: 'FeatureCollection',
+                features: storyData.map(function (s, i) {
+                    return { type: 'Feature', id: i, geometry: { type: 'Point', coordinates: [s.lng, s.lat] }, properties: {} };
+                })
+            };
+        }
+
+        function addStoryLayers() {
+            if (!map.getSource('story-points')) {
+                map.addSource('story-points', { type: 'geojson', data: buildStoryGeoJSON(), promoteId: 'id' });
+            }
+            if (!map.getLayer('story-circles')) {
+                map.addLayer({
+                    id: 'story-circles',
+                    type: 'circle',
+                    source: 'story-points',
+                    paint: {
+                        'circle-radius': ['case', ['boolean', ['feature-state', 'active'], false], 12, 7],
+                        'circle-color': '#c41e3a',
+                        'circle-opacity': ['case', ['boolean', ['feature-state', 'active'], false], 1, 0.6],
+                        'circle-stroke-width': 2,
+                        'circle-stroke-color': '#fff'
+                    }
+                });
+            }
+        }
+
+        var layerList = ['Map', 'Satellite', 'Terrain', 'Streets', 'Light', 'Dark'];
         var mapTypeWrap = document.createElement('div');
         mapTypeWrap.className = 'map-type-control-wrap';
         mapTypeWrap.innerHTML = '<div class="map-type-control">' +
@@ -155,8 +234,8 @@
             '<span class="map-type-label">Map</span><span class="map-type-chevron">▼</span>' +
             '</button>' +
             '<div class="map-type-menu" role="listbox" hidden>' +
-            layerList.map(function (item) {
-                return '<button type="button" class="map-type-option" role="option" data-name="' + escapeHtml(item.name) + '">' + escapeHtml(item.name) + '</button>';
+            layerList.map(function (name) {
+                return '<button type="button" class="map-type-option" role="option" data-name="' + escapeHtml(name) + '">' + escapeHtml(name) + '</button>';
             }).join('') +
             '</div></div>';
         var mapContainer = document.getElementById('map');
@@ -167,6 +246,7 @@
         var mapTypeMenu = mapTypeWrap.querySelector('.map-type-menu');
         var mapTypeOptions = mapTypeWrap.querySelectorAll('.map-type-option');
 
+        var isSwitchingStyle = false;
         mapTypeBtn.addEventListener('click', function (e) {
             e.stopPropagation();
             var isOpen = !mapTypeMenu.hidden;
@@ -182,35 +262,31 @@
 
         mapTypeOptions.forEach(function (opt) {
             opt.addEventListener('click', function () {
+                if (isSwitchingStyle) return;
                 var name = this.getAttribute('data-name');
-                var item = layerList.find(function (i) { return i.name === name; });
-                if (!item) return;
-                map.removeLayer(currentLayer);
-                item.layer.addTo(map);
-                currentLayer = item.layer;
-                currentName = name;
+                if (name === currentStyleName) {
+                    mapTypeMenu.hidden = true;
+                    return;
+                }
+
+                var styleUrl = getStyleUrl(name);
+                currentStyleName = name;
                 mapTypeLabel.textContent = name;
                 mapTypeMenu.hidden = true;
                 mapTypeBtn.setAttribute('aria-expanded', 'false');
                 mapTypeOptions.forEach(function (o) { o.classList.remove('selected'); });
                 this.classList.add('selected');
+
+                isSwitchingStyle = true;
+                var finalStyle = styleUrl === 'raster-arcgis-satellite' ? arcgisSatellite : styleUrl;
+
+                map.once('idle', function () { isSwitchingStyle = false; });
+                map.setStyle(finalStyle);
             });
         });
         mapTypeWrap.querySelector('.map-type-option[data-name="Map"]').classList.add('selected');
 
-        var markers = storyData.map(function (s) {
-            return L.circleMarker([s.lat, s.lng], {
-                radius: 7,
-                fillColor: '#c41e3a',
-                fillOpacity: 0.7,
-                color: '#fff',
-                weight: 2
-            }).addTo(map);
-        });
-
         var wrapper = byId('storyStepsWrapper');
-        var activeIndex = -1;
-        var currentPopup = null;
 
         function getWikimediaImageUrl(title, callback) {
             if (!title || !title.trim()) { callback(null); return; }
@@ -243,8 +319,23 @@
                 '<div class="year">' + step.year + '</div>' +
                 '<div class="place">' + escapeHtml(step.place) + '</div>' +
                 '<div class="text">' + escapeHtml(step.text) + '</div>' +
-                (step.detail ? '<div class="detail">' + escapeHtml(step.detail) + '</div>' : '') +
+                (step.detail ?
+                    '<div class="detail-container collapsed">' +
+                    '<div class="detail-text">' + escapeHtml(step.detail) + '</div>' +
+                    '</div>' +
+                    '<button class="read-more-btn">Read more</button>' : '') +
                 '</div>';
+
+            // Add Read More listener
+            var btn = div.querySelector('.read-more-btn');
+            if (btn) {
+                btn.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    var container = div.querySelector('.detail-container');
+                    var isCollapsed = container.classList.toggle('collapsed');
+                    btn.textContent = isCollapsed ? 'Read more' : 'Read less';
+                });
+            }
             div.addEventListener('click', function () {
                 div.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 activateStep(index);
@@ -257,18 +348,49 @@
         var placeholderImg = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400"><rect fill="#e8e8e8" width="800" height="400"/><text fill="#999" x="50%" y="50%" text-anchor="middle" dy=".3em" font-family="sans-serif" font-size="18">Image not available</text></svg>');
 
         steps.forEach(function (stepEl, index) {
-            var placeKeyword = stepEl.dataset.placeKeyword || (storyData[index] && storyData[index].place);
-            if (placeKeyword && placeKeyword.split) placeKeyword = placeKeyword.split(',')[0].trim();
+            var fullPlace = storyData[index] && storyData[index].place;
             var img = stepEl.querySelector('.step-image');
             if (!img) return;
-            if (!placeKeyword) { img.src = placeholderImg; return; }
-            getWikimediaImageUrl(placeKeyword, function (url) {
-                img.src = url || placeholderImg;
+            if (!fullPlace) { img.src = placeholderImg; return; }
+
+            var parts = fullPlace.split(',').map(function (p) { return p.trim(); });
+            var primary = parts[0];
+            var secondary = parts.length > 2 ? parts[parts.length - 2] : null; // state/region
+            var fallback = parts[parts.length - 1]; // country
+
+            function tryLoad(keywords, next) {
+                getWikimediaImageUrl(keywords, function (url) {
+                    if (url) {
+                        img.src = url;
+                    } else if (next) {
+                        next();
+                    } else {
+                        img.src = placeholderImg;
+                    }
+                });
+            }
+
+            // Chain: Primary (City) -> Secondary (State) -> Fallback (Country)
+            tryLoad(primary, function () {
+                if (secondary && secondary !== primary) {
+                    tryLoad(secondary, function () {
+                        if (fallback && fallback !== secondary && fallback !== primary) {
+                            tryLoad(fallback, null);
+                        } else {
+                            img.src = placeholderImg;
+                        }
+                    });
+                } else if (fallback && fallback !== primary) {
+                    tryLoad(fallback, null);
+                } else {
+                    img.src = placeholderImg;
+                }
             });
         });
 
-        function activateStep(index) {
+        function activateStep(index, skipFly) {
             if (index < 0 || index >= storyData.length) return;
+            if (index === activeIndex && !skipFly) return;
             activeIndex = index;
 
             steps.forEach(function (s, i) {
@@ -276,53 +398,68 @@
             });
 
             var step = storyData[index];
-            map.flyTo([step.lat, step.lng], step.zoom, { duration: 2.2, easeLinearity: 0.35 });
+            if (!skipFly) {
+                map.flyTo({ center: [step.lng, step.lat], zoom: step.zoom, duration: 2200 });
+            }
 
-            markers.forEach(function (m, i) {
-                m.setStyle({
-                    radius: i === index ? 12 : 7,
-                    fillOpacity: i === index ? 1 : 0.5
+            try {
+                storyData.forEach(function (_, i) {
+                    map.setFeatureState({ source: 'story-points', id: i }, { active: i === index });
                 });
-            });
+            } catch (e) { /* ignore if feature not ready */ }
 
-            if (currentPopup) map.closePopup(currentPopup);
-
+            popup.remove();
             setTimeout(function () {
-                currentPopup = L.popup({ closeButton: false, offset: [0, -12] })
-                    .setLatLng([step.lat, step.lng])
-                    .setContent(
+                if (activeIndex !== index) return;
+                popup.setLngLat([step.lng, step.lat])
+                    .setHTML(
                         '<div class="popup-content">' +
                         '<div class="popup-year">' + step.year + '</div>' +
                         '<div class="popup-place">' + escapeHtml(step.place) + '</div>' +
                         '<div class="popup-text">' + escapeHtml(step.text) + '</div>' +
                         '</div>'
                     )
-                    .openOn(map);
+                    .addTo(map);
             }, 1600);
         }
 
-        setTimeout(function () { activateStep(0); }, 500);
+        map.once('load', function () {
+            setTimeout(function () { activateStep(0); }, 500);
+        });
 
-        // One scroll — active step = which card's vertical range contains viewport center
         function onScroll() {
-            var viewportCenterY = window.innerHeight / 2;
+            if (isSwitchingStyle) return;
+
+            var isMobile = window.innerWidth < 992;
+
+            // Calculate trigger point
+            // Mobile: map is top 50%, cards are bottom 50%. Trigger when card hits center of bottom half (75%)
+            // Desktop: side by side. Trigger when card hits center of screen (50%)
+            var triggerY = isMobile ? (window.innerHeight * 0.75) : (window.innerHeight / 2);
+
             var found = -1;
             steps.forEach(function (step, index) {
                 var rect = step.getBoundingClientRect();
-                if (rect.top <= viewportCenterY && rect.bottom >= viewportCenterY) {
+                // Check if step crosses the trigger line
+                if (rect.top <= triggerY && rect.bottom >= triggerY) {
                     found = index;
                 }
             });
+
             if (found < 0 && steps.length > 0) {
                 var first = steps[0].getBoundingClientRect();
                 var last = steps[steps.length - 1].getBoundingClientRect();
-                if (viewportCenterY < first.top) found = 0;
-                else if (viewportCenterY > last.bottom) found = steps.length - 1;
+                if (triggerY < first.top) found = 0;
+                else if (triggerY > last.bottom) found = steps.length - 1;
             }
             if (found >= 0 && found !== activeIndex) activateStep(found);
         }
+
+        // Attach to both to handle resize/mode switches seamlessly
         window.addEventListener('scroll', onScroll, { passive: true });
-        onScroll();
+        wrapper.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onScroll, { passive: true });
+        setTimeout(onScroll, 100);
     }
 
     function run() {
@@ -476,4 +613,3 @@
     var loadPromise = loadConfig();
     if (loadPromise && typeof loadPromise.catch === 'function') loadPromise.catch(function (err) { console.error(err); });
 })();
-

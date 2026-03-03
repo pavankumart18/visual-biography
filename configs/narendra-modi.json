@@ -46,7 +46,7 @@
   "footer": {
     "lines": [
       "A scrollytelling experience exploring the geographic journey of Narendra Modi.",
-      "Data sourced from public records and news • Built with Leaflet.js"
+      "Data sourced from public records and news • Built with MapLibre GL JS"
     ]
   },
   "storyData": [

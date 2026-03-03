@@ -7,7 +7,8 @@ import { openaiConfig } from "https://cdn.jsdelivr.net/npm/bootstrap-llm-provide
 import { parse } from "https://cdn.jsdelivr.net/npm/partial-json@0.1.7/+esm";
 
 const $ = (sel, el = document) => el.querySelector(sel);
-const STORAGE_KEY = "storyTellingGeneratedConfig";
+const HISTORY_KEY = "storyTellingHistory_v1";
+const STORAGE_KEY = "storyTellingGeneratedConfig"; // for backward compat/temp draft
 
 /** Minify config to short keys for smaller URL. */
 function minifyStoryConfig(config) {
@@ -80,12 +81,12 @@ function parseStoryConfig(raw) {
   // Try full parse first
   try {
     return JSON.parse(str);
-  } catch (_) {}
+  } catch (_) { }
 
   // Try partial-json for truncated output
   try {
     return parse(str);
-  } catch (_) {}
+  } catch (_) { }
 
   return null;
 }
@@ -102,7 +103,7 @@ function normalizeStoryConfig(config) {
     mapSection: { intro: "Scroll to follow the journey. The map updates as you move." },
     articleReturn: { title: "Legacy", paragraphs: [""] },
     timeline: { title: "Key Milestones", items: [] },
-    footer: { lines: ["A scrollytelling experience.", "Built with Leaflet.js"] },
+    footer: { lines: ["A scrollytelling experience.", "Built with MapLibre GL JS"] },
   };
   const out = { ...defaults, ...config };
   out.meta = { ...defaults.meta, ...(config.meta || {}) };
@@ -154,6 +155,24 @@ cardsContainer.innerHTML = (indexConfig.cards || []).map(
   </div>`
 ).join("");
 
+function getHistory() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveToHistory(config) {
+  const history = getHistory();
+  // Avoid duplicates by title
+  const title = config.meta?.title;
+  const filtered = history.filter(h => h.meta?.title !== title);
+  filtered.unshift(config);
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(filtered.slice(0, 12)));
+}
+
 function getDraftConfig() {
   try {
     const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -166,26 +185,28 @@ function getDraftConfig() {
 function renderSavedStories() {
   const container = $("#saved-stories");
   if (!container) return;
-  const draft = getDraftConfig();
-  if (draft) {
-    const title = (draft.meta && draft.meta.title) ? draft.meta.title.replace(/\s*\|\s*The Story.*$/i, "").trim() : "Untitled story";
-    const encoded = encodeStoryForUrl(draft);
-    const href = encoded ? `stories.html#story=${encoded}` : "stories.html?generated=1";
-    container.innerHTML = `
-    <div class="col-md-4 col-lg-3">
-      <a href="${href}" class="text-decoration-none text-dark">
-        <div class="card demo-card h-100 text-center">
-          <div class="card-body d-flex flex-column">
-            <div class="mb-3"><i class="display-4 text-primary bi bi-link-45deg"></i></div>
-            <h6 class="card-title h5 mb-2">${title}</h6>
-            <p class="card-text small text-muted">Share or bookmark the link to keep it</p>
-            <span class="mt-auto btn btn-outline-primary btn-sm">View story</span>
+  const history = getHistory();
+  if (history.length > 0) {
+    container.innerHTML = history.map((draft) => {
+      const title = (draft.meta && draft.meta.title) ? draft.meta.title.replace(/\s*\|\s*The Story.*$/i, "").trim() : "Untitled story";
+      const encoded = encodeStoryForUrl(draft);
+      const href = encoded ? `stories.html#story=${encoded}` : "stories.html?generated=1";
+      return `
+      <div class="col-md-4 col-lg-3">
+        <a href="${href}" class="text-decoration-none text-dark">
+          <div class="card demo-card h-100 text-center shadow-sm">
+            <div class="card-body d-flex flex-column">
+              <div class="mb-3"><i class="display-4 text-primary bi bi-journal-bookmark-fill"></i></div>
+              <h6 class="card-title h6 mb-2">${title}</h6>
+              <p class="card-text small text-muted">Created in your history</p>
+              <span class="mt-auto btn btn-outline-primary btn-sm">View story</span>
+            </div>
           </div>
-        </div>
-      </a>
-    </div>`;
+        </a>
+      </div>`;
+    }).join("");
   } else {
-    container.innerHTML = '<p class="text-muted">Generate a story below—the link will be shareable and you can bookmark it.</p>';
+    container.innerHTML = '<p class="text-muted">Generate a story below—it will be saved to your local history and you can share the link.</p>';
   }
 }
 
@@ -215,16 +236,18 @@ $("#generate-form").addEventListener("submit", async (e) => {
 Person or topic: "${input}"
 
 IMPORTANT – Be descriptive and detailed:
-- hero.subtitle: 1–2 full sentences summarizing their journey and why it matters.
+- hero.subtitle: 1–2 evocative sentences capturing the essence of their journey.
 - articleIntro.lead: 3–4 sentences setting the scene and why this person's geography matters.
-- articleIntro.dropCap: A full paragraph (4–5 sentences) starting with their birth/roots; vivid and narrative.
+- articleIntro.dropCap: A full, beautifully written paragraph (4–5 sentences) starting with their birth/roots; vivid, narrative, and engaging.
 - articleIntro.dropCapHighlight: A short 3–5 word phrase from dropCap to highlight.
 - articleIntro.paragraph: 2–3 sentences linking the map to the story.
 - articleReturn.paragraphs: Two substantial paragraphs (3–4 sentences each) on their legacy and impact.
-- timeline.items: 8–12 items; each event can be a short phrase (e.g. "Elected president; launches reform programme").
-- storyData: 6–10 items. For EACH item: "text" = 2–3 sentences (what happened here, why it matters). "detail" = a full paragraph (4–6 sentences) with context, consequences, and vivid detail. Write like a biography, not a list.
+- timeline.items: 10–15 items; each event can be a short phrase (e.g. "Elected president; launches reform programme").
+- storyData: 12–18 items. For EACH item: "text" = 2–3 evocative sentences (focus on atmosphere, emotion, and the 'feel' of the place). "detail" = two substantial paragraphs (6-10 sentences total) with rich sensory details, narrative depth, and historical context. Avoid dry facts; tell a compelling story about this specific moment in their life.
 
 PLACES – Use accurate, full place names:
+- NEVER repeat the same location consecutively. If multiple events happen in the same place, combine them into one rich step.
+- TRY to use each location only once unless returning there is essential to the story arc.
 - "place" must be "City, Country" (e.g. "London, United Kingdom", "New York, United States", "Mumbai, India"). For US cities you may use "City, State, United States" (e.g. "Palo Alto, California, United States"). Use the correct spelling and the country name, not abbreviations.
 - Use the latitude and longitude table below for each location. If a city is not listed, look up and use precise decimal coordinates (lat and lng as numbers, e.g. 51.5074 and -0.1278). Every storyData entry MUST have exact numeric "lat" and "lng"; do not omit or approximate vaguely.
 
@@ -266,7 +289,7 @@ Beijing, China: lat 39.9042, lng 116.4074
 For any other city: use precise decimal lat/lng (negative lat = Southern hemisphere; negative lng = West). Order storyData by year ascending.
 
 JSON shape (use this structure; fill with rich content and exact place names + lat/lng):
-{"meta":{"title":"Full Name – A Geographic Biography | The Story"},"header":{"logo":"The Geographic Story"},"hero":{"label":"A Visual Biography","title":"The Journey of [Name]","subtitle":"One or two sentences.","author":"Visual Stories Team","date":"2026"},"articleIntro":{"lead":"Three to four sentences.","dropCap":"Full paragraph.","dropCapHighlight":"phrase","paragraph":"Two to three sentences."},"dataSection":{"title":"The Numbers Behind the Journey","cards":[{"value":"XX","label":"Years of Life"},{"value":"X","label":"Key Locations"},{"value":"X","label":"Continents"},{"value":"X","label":"Years Abroad"}]},"mapSection":{"intro":"Scroll to follow the journey."},"articleReturn":{"title":"Legacy","paragraphs":["First full paragraph.","Second full paragraph."]},"timeline":{"title":"Key Milestones","items":[{"year":"YYYY","event":"Event"},{"year":"YYYY","event":"Event"}]},"footer":{"lines":["A scrollytelling experience.","Built with Leaflet.js"]},"storyData":[{"year":1900,"place":"City, Country","lat":48.8566,"lng":2.3522,"zoom":11,"text":"Two to three sentences.","detail":"Full paragraph with context and impact."}]}
+{"meta":{"title":"Full Name – A Geographic Biography | The Story"},"header":{"logo":"The Geographic Story"},"hero":{"label":"A Visual Biography","title":"The Journey of [Name]","subtitle":"One or two sentences.","author":"Visual Stories Team","date":"2026"},"articleIntro":{"lead":"Three to four sentences.","dropCap":"Full paragraph.","dropCapHighlight":"phrase","paragraph":"Two to three sentences."},"dataSection":{"title":"The Numbers Behind the Journey","cards":[{"value":"XX","label":"Years of Life"},{"value":"X","label":"Key Locations"},{"value":"X","label":"Continents"},{"value":"X","label":"Years Abroad"}]},"mapSection":{"intro":"Scroll to follow the journey."},"articleReturn":{"title":"Legacy","paragraphs":["First full paragraph.","Second full paragraph."]},"timeline":{"title":"Key Milestones","items":[{"year":"YYYY","event":"Event"},{"year":"YYYY","event":"Event"}]},"footer":{"lines":["A scrollytelling experience.","Built with MapLibre GL JS"]},"storyData":[{"year":1900,"place":"City, Country","lat":48.8566,"lng":2.3522,"zoom":11,"text":"Two to three sentences.","detail":"Full paragraph with context and impact."}]}
 
 Reply with ONLY the JSON object.`;
 
@@ -309,6 +332,7 @@ Reply with ONLY the JSON object.`;
     config = config ? normalizeStoryConfig(config) : null;
     if (config && config.storyData && config.storyData.length > 0) {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+      saveToHistory(config);
       const encoded = encodeStoryForUrl(config);
       const target = encoded ? `stories.html#story=${encoded}` : "stories.html?generated=1";
       showNotification("Story generated! Opening…", "success");

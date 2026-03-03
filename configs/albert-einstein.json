@@ -48,7 +48,7 @@
   "footer": {
     "lines": [
       "A scrollytelling experience exploring the geographic journey of Albert Einstein.",
-      "Data sourced from biographies and historical records • Built with Leaflet.js"
+      "Data sourced from biographies and historical records • Built with MapLibre GL JS"
     ]
   },
   "storyData": [
